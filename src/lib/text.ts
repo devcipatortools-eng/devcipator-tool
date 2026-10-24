@@ -1,0 +1,109 @@
+/* ------------------------------ Word counter ------------------------------ */
+
+export interface TextStats {
+  words: number;
+  characters: number;
+  charactersNoSpaces: number;
+  sentences: number;
+  paragraphs: number;
+  lines: number;
+  readingSeconds: number;
+  speakingSeconds: number;
+  avgWordLength: number;
+}
+
+const WORD = /[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu;
+
+export function textStats(text: string): TextStats {
+  const words = text.match(WORD) ?? [];
+  const trimmed = text.trim();
+  const sentences = trimmed ? (trimmed.match(/[^.!?…]+(?:[.!?…]+|$)/g) ?? []).filter((s) => /[\p{L}\p{N}]/u.test(s)).length : 0;
+  const paragraphs = trimmed ? trimmed.split(/\n\s*\n/).filter((p) => p.trim()).length : 0;
+  const letters = words.reduce((n, w) => n + w.length, 0);
+  return {
+    words: words.length,
+    characters: [...text].length,
+    charactersNoSpaces: [...text.replace(/\s/g, "")].length,
+    sentences,
+    paragraphs,
+    lines: text ? text.split("\n").length : 0,
+    readingSeconds: (words.length / 238) * 60,
+    speakingSeconds: (words.length / 150) * 60,
+    avgWordLength: words.length ? letters / words.length : 0,
+  };
+}
+
+const STOPWORDS = new Set(
+  "a an and are as at be but by for from has have he her his i if in into is it its me my not of on or our she so that the their them they this to was we were what when which who will with you your".split(" "),
+);
+
+export function topKeywords(text: string, limit = 8): Array<{ word: string; count: number; share: number }> {
+  const words = (text.toLowerCase().match(WORD) ?? []).filter((w) => w.length > 2 && !STOPWORDS.has(w) && !/^\d+$/.test(w));
+  const counts = new Map<string, number>();
+  for (const w of words) counts.set(w, (counts.get(w) ?? 0) + 1);
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, limit)
+    .map(([word, count]) => ({ word, count, share: count / words.length }));
+}
+
+export function formatSeconds(s: number): string {
+  if (s < 1) return "0 sec";
+  if (s < 60) return `${Math.round(s)} sec`;
+  const m = Math.floor(s / 60);
+  const sec = Math.round(s % 60);
+  return sec ? `${m} min ${sec} sec` : `${m} min`;
+}
+
+/* ----------------------------- Case converter ----------------------------- */
+
+export type CaseStyle = "upper" | "lower" | "title" | "sentence" | "camel" | "pascal" | "snake" | "kebab" | "constant";
+
+const SMALL_WORDS = new Set("a an and as at but by en for if in nor of on or per the to v vs via".split(" "));
+
+/** Splits identifiers and prose into words: "parseHTTPResponse_v2" → parse, HTTP, Response, v2. */
+export function splitWords(text: string): string[] {
+  return text
+    .replace(/([\p{Ll}\p{N}])(\p{Lu})/gu, "$1 $2")
+    .replace(/(\p{Lu}+)(\p{Lu}\p{Ll})/gu, "$1 $2")
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter(Boolean);
+}
+
+const cap = (w: string) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+
+function convertLine(line: string, style: CaseStyle): string {
+  switch (style) {
+    case "upper":
+      return line.toUpperCase();
+    case "lower":
+      return line.toLowerCase();
+    case "sentence":
+      return line.toLowerCase().replace(/(^\s*\p{L}|[.!?]\s+\p{L})/gu, (m) => m.toUpperCase());
+    case "title": {
+      let index = 0;
+      return line.replace(/[\p{L}\p{N}]+(?:['’][\p{L}]+)*/gu, (w) => {
+        const lower = w.toLowerCase();
+        const first = index++ === 0;
+        return !first && SMALL_WORDS.has(lower) ? lower : cap(w);
+      });
+    }
+    default: {
+      const words = splitWords(line);
+      if (words.length === 0) return line;
+      if (style === "camel") return words.map((w, i) => (i === 0 ? w.toLowerCase() : cap(w))).join("");
+      if (style === "pascal") return words.map(cap).join("");
+      if (style === "snake") return words.map((w) => w.toLowerCase()).join("_");
+      if (style === "kebab") return words.map((w) => w.toLowerCase()).join("-");
+      return words.map((w) => w.toUpperCase()).join("_");
+    }
+  }
+}
+
+/** Converts each line separately so line breaks survive. */
+export function convertCase(text: string, style: CaseStyle): string {
+  return text
+    .split("\n")
+    .map((line) => convertLine(line, style))
+    .join("\n");
+}

@@ -1,0 +1,576 @@
+import type { LucideIcon } from "lucide-react";
+import {
+  AudioLines,
+  Barcode,
+  CaseSensitive,
+  Combine,
+  Crop,
+  FileImage,
+  FlipHorizontal,
+  Gauge,
+  Hash,
+  ImageDown,
+  Images,
+  LayoutGrid,
+  Laugh,
+  ListMusic,
+  Pipette,
+  QrCode,
+  RefreshCw,
+  Rewind,
+  RotateCw,
+  Scaling,
+  Scissors,
+  Signature,
+  Stamp,
+  TextCursorInput,
+  Volume2,
+} from "lucide-react";
+
+export type ToolCategory = "document" | "image" | "audio" | "utility";
+export type ToolBadge = "Popular" | "New" | "Batch" | "Live";
+
+export interface ToolFaq {
+  q: string;
+  a: string;
+}
+
+export interface ToolConfig {
+  slug: string;
+  title: string;
+  category: ToolCategory;
+  icon: LucideIcon;
+  badges: ToolBadge[];
+  /** One-liner shown on cards. */
+  description: string;
+  /** Longer copy for the tool page header and meta description. */
+  intro: string;
+  /** MIME types and/or extensions accepted by the dropzone. Empty for text-only tools. */
+  accept: string[];
+  /** Human readable list of accepted formats. */
+  acceptLabel: string;
+  maxSizeMB: number;
+  multiple: boolean;
+  keywords: string[];
+  steps: string[];
+  features: string[];
+  faqs: ToolFaq[];
+  related: string[];
+}
+
+export interface CategoryConfig {
+  id: ToolCategory;
+  label: string;
+  tagline: string;
+}
+
+export const CATEGORIES: CategoryConfig[] = [
+  { id: "document", label: "PDF", tagline: "Merge, split, sign, organize and convert PDFs." },
+  { id: "image", label: "Image", tagline: "Compress, resize, crop, convert and edit images." },
+  { id: "audio", label: "Audio", tagline: "Cut, join, speed up, boost and reverse audio." },
+  { id: "utility", label: "Utilities", tagline: "QR codes, barcodes, text and colour tools." },
+];
+
+const PDF = ["application/pdf", ".pdf"];
+const IMAGES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/bmp", "image/avif", ".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp", ".avif"];
+const AUDIO = ["audio/*", ".mp3", ".wav", ".ogg", ".oga", ".flac", ".aac", ".m4a", ".opus", ".webm"];
+const IMAGE_LABEL = "JPG, PNG, WebP, GIF, BMP, AVIF";
+const AUDIO_LABEL = "MP3, WAV, OGG, FLAC, AAC, M4A";
+
+export const TOOLS: ToolConfig[] = [
+  // ───────────────────────────── PDF ─────────────────────────────
+  {
+    slug: "merge-pdf",
+    title: "Merge PDF",
+    category: "document",
+    icon: Combine,
+    badges: ["Popular", "Batch"],
+    description: "Combine multiple PDFs into a single file in any order.",
+    intro: "Join PDF files into one document. Reorder them before merging and keep every page at its original quality.",
+    accept: PDF,
+    acceptLabel: "PDF",
+    maxSizeMB: 200,
+    multiple: true,
+    keywords: ["merge pdf", "combine pdf", "join pdf"],
+    steps: ["Add two or more PDFs.", "Drag the files into the order you want.", "Merge and download the combined PDF."],
+    features: ["Unlimited number of files", "Drag-and-drop ordering", "Lossless: pages are copied, not re-rendered", "Live page count per file"],
+    faqs: [{ q: "Can I merge password-protected PDFs?", a: "No. Encrypted PDFs are flagged in the list; remove the password in your PDF reader first." }],
+    related: ["split-pdf", "organize-pdf", "images-to-pdf"],
+  },
+  {
+    slug: "split-pdf",
+    title: "Split PDF",
+    category: "document",
+    icon: Scissors,
+    badges: [],
+    description: "Extract page ranges or split every page into its own file.",
+    intro: "Split a PDF by custom page ranges such as “1-3, 5”, into fixed-size chunks, or into single pages, with live thumbnails of what goes where.",
+    accept: PDF,
+    acceptLabel: "PDF",
+    maxSizeMB: 200,
+    multiple: false,
+    keywords: ["split pdf", "extract pdf pages", "separate pdf"],
+    steps: ["Drop a PDF to see its page thumbnails.", "Type page ranges (e.g. 1-3, 5), or choose every N pages or all pages.", "Split and download the parts or a ZIP."],
+    features: ["Thumbnail preview of every part", "Custom range syntax", "Fixed chunk size", "ZIP download for many parts"],
+    faqs: [{ q: "How do I write page ranges?", a: "Separate ranges with commas. Each range becomes one file: “1-3, 5, 7-9” produces three PDFs. “8-” means page 8 to the end." }],
+    related: ["merge-pdf", "organize-pdf", "pdf-to-images"],
+  },
+  {
+    slug: "organize-pdf",
+    title: "Organize PDF",
+    category: "document",
+    icon: LayoutGrid,
+    badges: [],
+    description: "Reorder or delete PDF pages on a thumbnail grid.",
+    intro: "See every page of your PDF as a thumbnail. Drag to reorder, delete the pages you do not need and save a new PDF.",
+    accept: PDF,
+    acceptLabel: "PDF",
+    maxSizeMB: 200,
+    multiple: false,
+    keywords: ["organize pdf", "reorder pdf pages", "delete pdf pages"],
+    steps: ["Drop a PDF to load page thumbnails.", "Drag pages to reorder and delete the ones you don’t need.", "Save and download the reorganized PDF."],
+    features: ["Live page thumbnails", "Drag-and-drop or arrow reordering", "Delete and restore pages", "Lossless page copying"],
+    faqs: [{ q: "Is quality reduced?", a: "No. Pages are copied as-is into the new file; nothing is re-rendered." }],
+    related: ["rotate-pdf", "split-pdf", "merge-pdf"],
+  },
+  {
+    slug: "images-to-pdf",
+    title: "Images to PDF",
+    category: "document",
+    icon: Images,
+    badges: ["Popular", "Batch"],
+    description: "Combine JPG and PNG images into one PDF.",
+    intro: "Turn photos and scans into a single, properly paginated PDF. Reorder pages and choose page size, orientation and margins.",
+    accept: IMAGES,
+    acceptLabel: IMAGE_LABEL,
+    maxSizeMB: 50,
+    multiple: true,
+    keywords: ["jpg to pdf", "png to pdf", "image to pdf"],
+    steps: ["Add your images.", "Drag to reorder; choose page size, orientation and margins.", "Create the PDF and download it."],
+    features: ["Fit-to-image, A4 or Letter pages", "Portrait, landscape or automatic orientation", "JPG and PNG embedded without re-encoding", "EXIF rotation respected"],
+    faqs: [{ q: "Is image quality reduced?", a: "No. JPG and PNG files are embedded as-is; other formats are converted losslessly to PNG." }],
+    related: ["pdf-to-images", "merge-pdf", "image-converter"],
+  },
+  {
+    slug: "pdf-to-images",
+    title: "PDF to Images",
+    category: "document",
+    icon: FileImage,
+    badges: ["New"],
+    description: "Export every PDF page as a high-resolution PNG or JPG.",
+    intro: "Render each page of a PDF at up to 300 DPI and download the pages as PNG or JPG images, bundled into a ZIP.",
+    accept: PDF,
+    acceptLabel: "PDF",
+    maxSizeMB: 200,
+    multiple: false,
+    keywords: ["pdf to jpg", "pdf to png", "pdf to image"],
+    steps: ["Drop a PDF.", "Pick the format, resolution and which pages to export.", "Convert and download a ZIP of images."],
+    features: ["72–300 DPI output", "PNG or JPG with quality control", "Export all pages or a range", "ZIP download"],
+    faqs: [{ q: "Which DPI should I use?", a: "150 DPI is good for screens, 300 DPI for printing. Higher DPI means larger files." }],
+    related: ["images-to-pdf", "split-pdf", "compress-image"],
+  },
+  {
+    slug: "sign-pdf",
+    title: "Sign PDF",
+    category: "document",
+    icon: Signature,
+    badges: ["Popular"],
+    description: "Draw or upload a signature and place it on any page.",
+    intro: "Draw your signature with a mouse, trackpad or finger — or upload an image of it — then drag and resize it onto any page and save a signed PDF.",
+    accept: PDF,
+    acceptLabel: "PDF",
+    maxSizeMB: 100,
+    multiple: false,
+    keywords: ["sign pdf", "pdf signature", "e-sign pdf"],
+    steps: ["Drop the PDF to sign.", "Draw or upload your signature, then drag and resize it on the page.", "Apply and download the signed PDF."],
+    features: ["Smooth signature pad with pen colours", "Upload a signature image (transparent PNG works best)", "Drag to position, handle to resize", "Place on several pages"],
+    faqs: [{ q: "Is this a legally binding digital signature?", a: "It adds a visual signature image. It does not add a cryptographic certificate-based signature." }],
+    related: ["add-page-numbers", "organize-pdf", "merge-pdf"],
+  },
+  {
+    slug: "rotate-pdf",
+    title: "Rotate PDF",
+    category: "document",
+    icon: RotateCw,
+    badges: [],
+    description: "Rotate individual pages or all pages by 90°, 180° or 270°.",
+    intro: "Fix sideways or upside-down pages. Rotate pages one by one from the thumbnail grid or all at once.",
+    accept: PDF,
+    acceptLabel: "PDF",
+    maxSizeMB: 200,
+    multiple: false,
+    keywords: ["rotate pdf", "turn pdf pages", "flip pdf"],
+    steps: ["Drop a PDF.", "Rotate single pages or all pages by 90°, 180° or 270°.", "Save and download."],
+    features: ["Per-page rotation", "Rotate all pages at once", "Live thumbnails", "Lossless — rotation is a page attribute"],
+    faqs: [{ q: "Does rotating reduce quality?", a: "No. Rotation is stored as a page attribute; the content is not re-rendered." }],
+    related: ["organize-pdf", "split-pdf", "add-page-numbers"],
+  },
+  {
+    slug: "add-page-numbers",
+    title: "Add Page Numbers",
+    category: "document",
+    icon: Hash,
+    badges: [],
+    description: "Stamp “Page X of Y” style numbers onto a PDF.",
+    intro: "Number the pages of a PDF with a custom format, font size, position and starting number.",
+    accept: PDF,
+    acceptLabel: "PDF",
+    maxSizeMB: 200,
+    multiple: false,
+    keywords: ["add page numbers to pdf", "number pdf pages", "pdf pagination"],
+    steps: ["Drop a PDF.", "Choose the format, position, size and first page.", "Apply and download the numbered PDF."],
+    features: ["Formats like “Page {n} of {total}” or “{n}”", "Six positions (top/bottom × left/centre/right)", "Font size, colour and margin", "Skip the first page(s)"],
+    faqs: [{ q: "Can I start numbering at a different number?", a: "Yes. Set the starting number and choose which page to start stamping from." }],
+    related: ["sign-pdf", "merge-pdf", "rotate-pdf"],
+  },
+
+  // ───────────────────────────── Image ─────────────────────────────
+  {
+    slug: "compress-image",
+    title: "Compress Image",
+    category: "image",
+    icon: ImageDown,
+    badges: ["Popular", "Batch"],
+    description: "Shrink JPG, PNG and WebP with a live before/after preview.",
+    intro: "Reduce image file size with a target size and quality slider, and compare the result against the original before downloading.",
+    accept: IMAGES,
+    acceptLabel: IMAGE_LABEL,
+    maxSizeMB: 50,
+    multiple: true,
+    keywords: ["compress image", "reduce image size", "compress jpg", "compress png"],
+    steps: ["Add one or more images.", "Set the maximum file size, quality and output format.", "Compare before/after and download."],
+    features: ["Target maximum size in KB/MB", "Quality slider with live preview", "Draggable before/after comparison", "Runs in a Web Worker"],
+    faqs: [{ q: "Which format compresses best?", a: "WebP is usually 25–35% smaller than JPG at the same visual quality. PNG is best for graphics with flat colours." }],
+    related: ["resize-image", "image-converter", "crop-image"],
+  },
+  {
+    slug: "resize-image",
+    title: "Resize Image",
+    category: "image",
+    icon: Scaling,
+    badges: ["Batch"],
+    description: "Scale images by exact pixels or percentage.",
+    intro: "Resize one or many images to exact pixel dimensions or by percentage, with an aspect-ratio lock and high-quality resampling.",
+    accept: IMAGES,
+    acceptLabel: IMAGE_LABEL,
+    maxSizeMB: 50,
+    multiple: true,
+    keywords: ["resize image", "scale image", "image dimensions"],
+    steps: ["Add your images.", "Set width and height in pixels or a percentage.", "Resize and download."],
+    features: ["Pixel or percentage mode", "Aspect ratio lock", "Social media size presets", "High-quality multi-step downscaling"],
+    faqs: [{ q: "Will enlarging make images sharper?", a: "No. Upscaling cannot add detail that is not in the original; it will look softer." }],
+    related: ["crop-image", "compress-image", "image-converter"],
+  },
+  {
+    slug: "image-converter",
+    title: "Image Converter",
+    category: "image",
+    icon: RefreshCw,
+    badges: ["Batch"],
+    description: "Convert images between JPG, PNG, WebP and BMP.",
+    intro: "Convert any browser-readable image to JPG, PNG, WebP or BMP in bulk, with quality control and a background fill for transparent images.",
+    accept: [...IMAGES, "image/svg+xml", ".svg"],
+    acceptLabel: `${IMAGE_LABEL}, SVG`,
+    maxSizeMB: 50,
+    multiple: true,
+    keywords: ["convert to jpg", "png to jpg", "webp to png", "image to bmp"],
+    steps: ["Add images in any common format.", "Pick JPG, PNG, WebP or BMP and the quality.", "Convert and download one by one or as a ZIP."],
+    features: ["JPG, PNG, WebP and BMP output", "Quality control for lossy formats", "Background colour for transparency", "ZIP download for batches"],
+    faqs: [{ q: "What happens to transparency when converting to JPG or BMP?", a: "Those formats are saved without transparency, so transparent pixels are filled with the background colour you choose." }],
+    related: ["compress-image", "resize-image", "rotate-flip-image"],
+  },
+  {
+    slug: "crop-image",
+    title: "Crop Image",
+    category: "image",
+    icon: Crop,
+    badges: [],
+    description: "Crop with an interactive box and aspect presets.",
+    intro: "Drag a bounding box to crop your image, or lock it to aspect ratios like 1:1, 16:9 and 4:3.",
+    accept: IMAGES,
+    acceptLabel: IMAGE_LABEL,
+    maxSizeMB: 50,
+    multiple: false,
+    keywords: ["crop image", "cut image", "image cropper"],
+    steps: ["Drop an image.", "Drag the crop box or pick an aspect preset.", "Crop and download."],
+    features: ["Draggable, resizable crop box", "1:1, 4:3, 16:9, 9:16 and free presets", "Exact pixel inputs", "Rule-of-thirds guides"],
+    faqs: [{ q: "Is the crop applied at full resolution?", a: "Yes. The preview is scaled down, but the crop is applied to the original pixels." }],
+    related: ["resize-image", "rotate-flip-image", "meme-generator"],
+  },
+  {
+    slug: "rotate-flip-image",
+    title: "Rotate & Flip Image",
+    category: "image",
+    icon: FlipHorizontal,
+    badges: ["Batch"],
+    description: "Rotate 90° either way and flip horizontally or vertically.",
+    intro: "Fix sideways photos and mirror images. Rotate in 90° steps and flip horizontally or vertically, for one image or a batch.",
+    accept: IMAGES,
+    acceptLabel: IMAGE_LABEL,
+    maxSizeMB: 50,
+    multiple: true,
+    keywords: ["rotate image", "flip image", "mirror image"],
+    steps: ["Add images.", "Rotate and flip using the controls.", "Apply and download."],
+    features: ["Rotate clockwise or counter-clockwise", "Horizontal and vertical flip", "Applies to every image in a batch", "Lossless with PNG output"],
+    faqs: [{ q: "Does rotating JPG lose quality?", a: "The image is re-encoded at high quality (95%). Choose PNG output for a fully lossless result." }],
+    related: ["crop-image", "resize-image", "image-converter"],
+  },
+  {
+    slug: "watermark-image",
+    title: "Watermark Image",
+    category: "image",
+    icon: Stamp,
+    badges: ["Batch"],
+    description: "Add text or logo watermarks with opacity and position.",
+    intro: "Protect your images with a text or logo watermark. Control opacity, size, rotation and position, or tile it across the whole image.",
+    accept: IMAGES,
+    acceptLabel: IMAGE_LABEL,
+    maxSizeMB: 50,
+    multiple: true,
+    keywords: ["watermark image", "add logo to photo", "photo watermark"],
+    steps: ["Add the images to watermark.", "Type text or upload a logo, then set position, opacity and size.", "Apply and download."],
+    features: ["Text or image watermarks", "9-point placement or tiled pattern", "Opacity, size and rotation controls", "Applied to every image in the batch"],
+    faqs: [{ q: "Does the watermark scale with image size?", a: "Yes. Size is relative to each image's width, so it looks consistent across a batch." }],
+    related: ["meme-generator", "compress-image", "resize-image"],
+  },
+  {
+    slug: "meme-generator",
+    title: "Meme Generator",
+    category: "image",
+    icon: Laugh,
+    badges: [],
+    description: "Add classic top and bottom Impact captions to any image.",
+    intro: "Create memes with bold Impact captions and a black outline at the top and bottom of any image.",
+    accept: IMAGES,
+    acceptLabel: IMAGE_LABEL,
+    maxSizeMB: 20,
+    multiple: false,
+    keywords: ["meme generator", "meme maker", "add text to image"],
+    steps: ["Drop an image.", "Type the top and bottom text and style it.", "Download your meme."],
+    features: ["Impact font with black outline", "Automatic line wrapping", "Font size, fill and outline colour", "Uppercase toggle"],
+    faqs: [{ q: "Is there a watermark on my meme?", a: "No. Nothing is added beyond your text." }],
+    related: ["watermark-image", "crop-image", "resize-image"],
+  },
+
+  // ───────────────────────────── Audio ─────────────────────────────
+  {
+    slug: "audio-cutter",
+    title: "Audio Cutter",
+    category: "audio",
+    icon: AudioLines,
+    badges: ["Popular"],
+    description: "Trim audio on a waveform with draggable handles.",
+    intro: "Cut a section out of any song or recording. Drag the start and end handles on the waveform, preview the selection and export it as WAV or MP3.",
+    accept: AUDIO,
+    acceptLabel: AUDIO_LABEL,
+    maxSizeMB: 200,
+    multiple: false,
+    keywords: ["audio cutter", "mp3 cutter", "trim audio", "ringtone maker"],
+    steps: ["Drop an audio file.", "Drag the handles or type exact times, then preview.", "Export the selection as MP3 or WAV."],
+    features: ["Waveform with dual handles", "Keep or remove the selection", "Fade in and fade out", "MP3 or WAV export"],
+    faqs: [{ q: "Can I make a ringtone?", a: "Yes. Select up to 30 seconds, add a short fade and export as MP3." }],
+    related: ["audio-joiner", "volume-booster", "reverse-audio"],
+  },
+  {
+    slug: "audio-joiner",
+    title: "Audio Joiner",
+    category: "audio",
+    icon: ListMusic,
+    badges: ["Batch"],
+    description: "Join multiple tracks into one, in any order.",
+    intro: "Combine several audio files into a single track in any order, with an optional gap or crossfade between them.",
+    accept: AUDIO,
+    acceptLabel: AUDIO_LABEL,
+    maxSizeMB: 200,
+    multiple: true,
+    keywords: ["merge audio", "join mp3", "combine audio"],
+    steps: ["Add two or more audio files.", "Reorder them and set a gap or crossfade.", "Join and download."],
+    features: ["Drag-and-drop track order", "Gap or crossfade between tracks", "Mixed formats and sample rates", "MP3 or WAV export"],
+    faqs: [{ q: "Can I join files with different formats?", a: "Yes. Every file is decoded to the same sample rate before joining." }],
+    related: ["audio-cutter", "volume-booster", "audio-speed"],
+  },
+  {
+    slug: "audio-speed",
+    title: "Audio Speed Changer",
+    category: "audio",
+    icon: Gauge,
+    badges: [],
+    description: "Change speed from 0.5x to 2x without changing pitch.",
+    intro: "Speed up or slow down audio between 0.5x and 2.0x. Pitch lock keeps voices and instruments in their original key.",
+    accept: AUDIO,
+    acceptLabel: AUDIO_LABEL,
+    maxSizeMB: 200,
+    multiple: false,
+    keywords: ["change audio speed", "slow down audio", "speed up mp3"],
+    steps: ["Drop an audio file.", "Set the speed and choose whether to keep the pitch.", "Process and download."],
+    features: ["0.5x – 2.0x in 0.05 steps", "Pitch lock (time-stretch) in a Web Worker", "Instant preview of the setting", "MP3 or WAV export"],
+    faqs: [{ q: "What is pitch lock?", a: "With pitch lock the tempo changes but the key stays the same. Without it, faster audio also sounds higher, like a tape machine." }],
+    related: ["audio-cutter", "volume-booster", "reverse-audio"],
+  },
+  {
+    slug: "volume-booster",
+    title: "Volume Booster",
+    category: "audio",
+    icon: Volume2,
+    badges: [],
+    description: "Boost gain up to 300% or normalize, with a peak limiter.",
+    intro: "Make quiet recordings louder. Boost volume up to 300% with a limiter that prevents clipping, or normalize the peak level.",
+    accept: AUDIO,
+    acceptLabel: AUDIO_LABEL,
+    maxSizeMB: 200,
+    multiple: false,
+    keywords: ["volume booster", "normalize audio", "make audio louder"],
+    steps: ["Drop an audio file.", "Choose Boost (percentage) or Normalize (target peak).", "Preview, process and download."],
+    features: ["Up to 300% gain", "Peak normalization to a target dB", "Peak limiter to avoid clipping", "Live preview through a GainNode"],
+    faqs: [{ q: "Boost or normalize?", a: "Normalize raises the loudest peak to the target — safe and predictable. Boost pushes further and relies on the limiter." }],
+    related: ["audio-cutter", "audio-speed", "audio-joiner"],
+  },
+  {
+    slug: "reverse-audio",
+    title: "Reverse Audio",
+    category: "audio",
+    icon: Rewind,
+    badges: [],
+    description: "Play any audio backwards for creative effects.",
+    intro: "Reverse an audio file so it plays backwards — for sound design, hidden messages or creative effects.",
+    accept: AUDIO,
+    acceptLabel: AUDIO_LABEL,
+    maxSizeMB: 200,
+    multiple: false,
+    keywords: ["reverse audio", "play backwards", "reverse mp3"],
+    steps: ["Drop an audio file.", "Preview the reversed audio.", "Download as MP3 or WAV."],
+    features: ["Sample-accurate reversal", "Instant preview", "Works with any browser-decodable format", "MP3 or WAV export"],
+    faqs: [{ q: "Can I reverse only part of a file?", a: "Trim the part first with the Audio Cutter, then reverse it here." }],
+    related: ["audio-cutter", "audio-speed", "volume-booster"],
+  },
+
+  // ───────────────────────────── Utilities ─────────────────────────────
+  {
+    slug: "qr-code",
+    title: "QR Code Generator & Scanner",
+    category: "utility",
+    icon: QrCode,
+    badges: ["Popular"],
+    description: "Create styled QR codes for links, text or Wi-Fi — and scan them.",
+    intro: "Generate QR codes for URLs, text, Wi-Fi networks, email and phone numbers with custom colours and error correction — or read a QR code from an image.",
+    accept: IMAGES,
+    acceptLabel: IMAGE_LABEL,
+    maxSizeMB: 20,
+    multiple: false,
+    keywords: ["qr code generator", "wifi qr code", "qr scanner", "read qr code"],
+    steps: ["Choose a type (link, text, Wi-Fi…) and enter the details.", "Pick colours, size and error correction.", "Download PNG or SVG — or switch to Scan and drop an image."],
+    features: ["Link, text, Wi-Fi, email and phone", "Custom colours, margin and size", "PNG and SVG download", "Scan QR codes from images"],
+    faqs: [{ q: "Do these QR codes expire?", a: "No. They encode your content directly; there is no redirect service involved." }],
+    related: ["barcode-generator", "color-picker", "word-counter"],
+  },
+  {
+    slug: "barcode-generator",
+    title: "Barcode Generator",
+    category: "utility",
+    icon: Barcode,
+    badges: [],
+    description: "Create Code128, EAN-13, UPC and more as SVG or PNG.",
+    intro: "Generate printable barcodes in Code128, EAN-13, EAN-8, UPC-A, Code39 and ITF-14 formats, and download them as SVG or PNG.",
+    accept: [],
+    acceptLabel: "",
+    maxSizeMB: 0,
+    multiple: false,
+    keywords: ["barcode generator", "ean 13 barcode", "code128", "upc barcode"],
+    steps: ["Choose a barcode format.", "Enter the value and adjust size and colours.", "Download as SVG or PNG."],
+    features: ["Code128, EAN-13, EAN-8, UPC-A, Code39, ITF-14", "Live validation of the value", "Bar width, height and text options", "SVG (vector) and PNG download"],
+    faqs: [{ q: "Why is my EAN-13 value rejected?", a: "EAN-13 needs 12 or 13 digits. If you enter 13 digits, the last one must be a valid check digit." }],
+    related: ["qr-code", "color-picker", "case-converter"],
+  },
+  {
+    slug: "word-counter",
+    title: "Word & Character Counter",
+    category: "utility",
+    icon: TextCursorInput,
+    badges: ["Live"],
+    description: "Live word, character, sentence and reading-time stats.",
+    intro: "Paste or type text to instantly count words, characters (with and without spaces), sentences, paragraphs, and estimate reading and speaking time.",
+    accept: [],
+    acceptLabel: "",
+    maxSizeMB: 0,
+    multiple: false,
+    keywords: ["word counter", "character counter", "reading time"],
+    steps: ["Paste or type your text.", "See the counts update as you type.", "Check keyword density and reading time."],
+    features: ["Words, characters, sentences, paragraphs", "Reading and speaking time", "Top keywords", "Text is kept only in this tab"],
+    faqs: [{ q: "How is reading time calculated?", a: "At 238 words per minute (average adult silent reading speed). Speaking time uses 150 words per minute." }],
+    related: ["case-converter", "qr-code", "barcode-generator"],
+  },
+  {
+    slug: "case-converter",
+    title: "Case Converter",
+    category: "utility",
+    icon: CaseSensitive,
+    badges: ["Live"],
+    description: "UPPERCASE, lowercase, Title Case, camelCase, snake_case and more.",
+    intro: "Convert text between UPPERCASE, lowercase, Title Case, Sentence case, camelCase, PascalCase, snake_case, kebab-case and CONSTANT_CASE in one click.",
+    accept: [],
+    acceptLabel: "",
+    maxSizeMB: 0,
+    multiple: false,
+    keywords: ["case converter", "title case", "camelcase", "snake case"],
+    steps: ["Paste your text.", "Click the case you want.", "Copy the result."],
+    features: ["9 case styles", "Handles existing camelCase and snake_case input", "One-click copy", "Undo back to the original"],
+    faqs: [{ q: "Does Title Case keep small words lowercase?", a: "Yes. Articles and short prepositions (a, of, the, in…) stay lowercase unless they start the title." }],
+    related: ["word-counter", "barcode-generator", "qr-code"],
+  },
+  {
+    slug: "color-picker",
+    title: "Color Picker from Image",
+    category: "utility",
+    icon: Pipette,
+    badges: ["New"],
+    description: "Pick any pixel's colour and extract an image palette.",
+    intro: "Upload an image and click any pixel to get its HEX, RGB and HSL values, with a magnifier for precision and an automatically extracted colour palette.",
+    accept: IMAGES,
+    acceptLabel: IMAGE_LABEL,
+    maxSizeMB: 30,
+    multiple: false,
+    keywords: ["color picker from image", "eyedropper", "image color palette", "hex from image"],
+    steps: ["Drop an image.", "Hover to magnify and click to pick a colour.", "Copy HEX, RGB or HSL — or use the extracted palette."],
+    features: ["Pixel-precise eyedropper with magnifier", "HEX, RGB and HSL with one-click copy", "Dominant colour palette", "History of picked colours"],
+    faqs: [{ q: "How is the palette chosen?", a: "Pixels are grouped with a median-cut algorithm and the most common colour groups are shown." }],
+    related: ["qr-code", "image-converter", "crop-image"],
+  },
+];
+
+export const TOOL_MAP: Record<string, ToolConfig> = Object.fromEntries(TOOLS.map((t) => [t.slug, t]));
+
+export function getTool(slug: string): ToolConfig | undefined {
+  return TOOL_MAP[slug];
+}
+
+export function getCategory(id: string): CategoryConfig | undefined {
+  return CATEGORIES.find((c) => c.id === id);
+}
+
+export function toolsInCategory(category: ToolCategory): ToolConfig[] {
+  return TOOLS.filter((t) => t.category === category);
+}
+
+export function relatedTools(tool: ToolConfig, limit = 6): ToolConfig[] {
+  const explicit = tool.related.map(getTool).filter((t): t is ToolConfig => Boolean(t));
+  const sameCategory = toolsInCategory(tool.category).filter((t) => t.slug !== tool.slug && !tool.related.includes(t.slug));
+  return [...explicit, ...sameCategory].slice(0, limit);
+}
+
+export const POPULAR_TOOLS = ["merge-pdf", "sign-pdf", "compress-image", "audio-cutter", "qr-code", "images-to-pdf"];
+
+export const SITE = {
+  name: "Devcipator Tools",
+  shortName: "Devcipator",
+  description: "Free, private, in-browser tools for PDFs, images, audio and everyday tasks. Files never leave your device.",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+};
+
+/** Shared FAQ appended to every tool page. */
+export const COMMON_FAQS: ToolFaq[] = [
+  {
+    q: "Are my files uploaded to a server?",
+    a: "No. Processing happens entirely in your browser with Web APIs and WebAssembly. Your files never leave your device.",
+  },
+  { q: "Is it free?", a: "Yes, every tool is free with no sign-up and no watermarks." },
+];

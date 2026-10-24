@@ -1,26 +1,204 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/*
+ * Design tokens. Every color in the UI comes from here so light and dark
+ * themes stay in sync. Category accents: document = coral, image = teal,
+ * audio = amber; the brand primary is indigo.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  --bg: oklch(0.985 0.004 264);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.972 0.006 264);
+  --surface-3: oklch(0.945 0.009 264);
+  --border: oklch(0.912 0.01 264);
+  --border-strong: oklch(0.85 0.014 264);
+
+  --fg: oklch(0.22 0.03 264);
+  --fg-muted: oklch(0.46 0.03 264);
+  --fg-subtle: oklch(0.6 0.022 264);
+
+  --primary: oklch(0.52 0.21 268);
+  --primary-hover: oklch(0.47 0.21 268);
+  --primary-fg: oklch(0.99 0 0);
+  --primary-soft: oklch(0.95 0.03 268);
+  --primary-strong: oklch(0.42 0.19 268);
+
+  --doc: oklch(0.6 0.2 25);
+  --doc-soft: oklch(0.955 0.03 25);
+  --doc-strong: oklch(0.5 0.19 25);
+  --img: oklch(0.6 0.13 175);
+  --img-soft: oklch(0.955 0.03 175);
+  --img-strong: oklch(0.46 0.1 175);
+  --aud: oklch(0.72 0.16 65);
+  --aud-soft: oklch(0.96 0.04 75);
+  --aud-strong: oklch(0.52 0.13 60);
+  --utl: oklch(0.58 0.2 305);
+  --utl-soft: oklch(0.955 0.03 305);
+  --utl-strong: oklch(0.47 0.19 305);
+
+  --success: oklch(0.58 0.15 150);
+  --success-soft: oklch(0.955 0.04 150);
+  --danger: oklch(0.56 0.21 27);
+  --danger-soft: oklch(0.955 0.03 27);
+  --warning: oklch(0.7 0.15 75);
+  --warning-soft: oklch(0.965 0.045 85);
+
+  --checker-a: oklch(0.96 0 0);
+  --checker-b: oklch(0.9 0 0);
+
+  --shadow-color: 264 30% 20%;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: oklch(0.155 0.018 264);
+  --surface: oklch(0.195 0.02 264);
+  --surface-2: oklch(0.225 0.022 264);
+  --surface-3: oklch(0.265 0.024 264);
+  --border: oklch(0.29 0.022 264);
+  --border-strong: oklch(0.37 0.026 264);
+
+  --fg: oklch(0.95 0.008 264);
+  --fg-muted: oklch(0.74 0.02 264);
+  --fg-subtle: oklch(0.6 0.02 264);
+
+  --primary: oklch(0.68 0.17 270);
+  --primary-hover: oklch(0.74 0.15 270);
+  --primary-fg: oklch(0.16 0.03 264);
+  --primary-soft: oklch(0.28 0.07 270);
+  --primary-strong: oklch(0.8 0.12 270);
+
+  --doc: oklch(0.7 0.17 25);
+  --doc-soft: oklch(0.28 0.06 25);
+  --doc-strong: oklch(0.8 0.12 25);
+  --img: oklch(0.74 0.12 175);
+  --img-soft: oklch(0.27 0.045 175);
+  --img-strong: oklch(0.83 0.1 175);
+  --aud: oklch(0.8 0.14 70);
+  --aud-soft: oklch(0.29 0.05 70);
+  --aud-strong: oklch(0.86 0.12 75);
+  --utl: oklch(0.72 0.15 305);
+  --utl-soft: oklch(0.28 0.06 305);
+  --utl-strong: oklch(0.82 0.11 305);
+
+  --success: oklch(0.72 0.15 150);
+  --success-soft: oklch(0.27 0.05 150);
+  --danger: oklch(0.7 0.18 25);
+  --danger-soft: oklch(0.28 0.07 25);
+  --warning: oklch(0.8 0.14 80);
+  --warning-soft: oklch(0.29 0.05 80);
+
+  --checker-a: oklch(0.3 0 0);
+  --checker-b: oklch(0.25 0 0);
+
+  --shadow-color: 264 40% 2%;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-strong: var(--primary-strong);
+  --color-doc: var(--doc);
+  --color-doc-soft: var(--doc-soft);
+  --color-doc-strong: var(--doc-strong);
+  --color-img: var(--img);
+  --color-img-soft: var(--img-soft);
+  --color-img-strong: var(--img-strong);
+  --color-aud: var(--aud);
+  --color-aud-soft: var(--aud-soft);
+  --color-aud-strong: var(--aud-strong);
+  --color-utl: var(--utl);
+  --color-utl-soft: var(--utl-soft);
+  --color-utl-strong: var(--utl-strong);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --shadow-card: 0 1px 2px hsl(var(--shadow-color) / 0.06), 0 1px 1px hsl(var(--shadow-color) / 0.04);
+  --shadow-pop: 0 10px 30px -10px hsl(var(--shadow-color) / 0.25), 0 2px 6px hsl(var(--shadow-color) / 0.08);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--bg);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+}
+
+/* The product intentionally ships without motion. */
+*,
+*::before,
+*::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--primary-soft);
+  color: var(--fg);
+}
+
+.bg-checker {
+  background-color: var(--checker-a);
+  background-image:
+    linear-gradient(45deg, var(--checker-b) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--checker-b) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--checker-b) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--checker-b) 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+input[type="range"] {
+  accent-color: var(--primary);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--primary);
+}
+
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
 }
