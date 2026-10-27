@@ -563,7 +563,10 @@ export const SITE = {
   name: "Devcipator Tools",
   shortName: "Devcipator",
   description: "Free, private, in-browser tools for PDFs, images, audio and everyday tasks. Files never leave your device.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  // VERCEL_PROJECT_PRODUCTION_URL is set by Vercel at build time (host only, no scheme).
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000"),
 };
 
 /** Shared FAQ appended to every tool page. */

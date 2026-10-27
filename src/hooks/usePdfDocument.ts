@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { PDFDocumentProxy } from "pdfjs-dist";
+import type { PDFDocumentProxy } from "pdfjs-dist/legacy/build/pdf.mjs";
 import { closePdf, openPdf, PasswordRequiredError } from "@/lib/pdf/pdfjs";
 import { errorMessage } from "@/lib/files";
 

@@ -6,7 +6,8 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const targets = [
-  ["node_modules/pdfjs-dist/build/pdf.worker.min.mjs", "public/vendor/pdfjs/pdf.worker.min.mjs"],
+  // Legacy build to match src/lib/pdf/pdfjs.ts (includes polyfills for older browsers).
+  ["node_modules/pdfjs-dist/legacy/build/pdf.worker.min.mjs", "public/vendor/pdfjs/pdf.worker.min.mjs"],
   ["node_modules/pdfjs-dist/cmaps", "public/vendor/pdfjs/cmaps"],
   ["node_modules/pdfjs-dist/standard_fonts", "public/vendor/pdfjs/standard_fonts"],
   ["node_modules/pdfjs-dist/wasm", "public/vendor/pdfjs/wasm"],

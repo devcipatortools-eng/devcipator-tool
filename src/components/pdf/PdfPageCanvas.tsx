@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { PDFDocumentProxy } from "pdfjs-dist";
+import type { PDFDocumentProxy } from "pdfjs-dist/legacy/build/pdf.mjs";
 import { FileText } from "lucide-react";
 import { renderPage } from "@/lib/pdf/pdfjs";
 import { usePdfDocument } from "@/hooks/usePdfDocument";

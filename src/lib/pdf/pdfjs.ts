@@ -1,14 +1,18 @@
-import type { PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist";
+import type { PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist/legacy/build/pdf.mjs";
 
-type PdfJs = typeof import("pdfjs-dist");
+type PdfJs = typeof import("pdfjs-dist/legacy/build/pdf.mjs");
 let pdfjsPromise: Promise<PdfJs> | null = null;
 
 const BASE = "/vendor/pdfjs";
 
-/** Lazily loads PDF.js and points it at the self-hosted worker (copied by scripts/copy-vendor.mjs). */
+/**
+ * Lazily loads PDF.js and points it at the self-hosted worker (copied by scripts/copy-vendor.mjs).
+ * Uses the legacy build: the modern one needs Map#getOrInsertComputed, which browsers older than
+ * ~Chrome 150 lack, so page rendering threw there.
+ */
 export function getPdfjs(): Promise<PdfJs> {
   if (!pdfjsPromise) {
-    pdfjsPromise = import("pdfjs-dist").then((pdfjs) => {
+    pdfjsPromise = import("pdfjs-dist/legacy/build/pdf.mjs").then((pdfjs) => {
       pdfjs.GlobalWorkerOptions.workerSrc = `${BASE}/pdf.worker.min.mjs`;
       return pdfjs;
     });

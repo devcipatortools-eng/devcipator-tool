@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronDown, ChevronRight, CircleCheck, ShieldCheck } from "lucide-react";
-import { COMMON_FAQS, SITE, TOOLS, getCategory, getTool, relatedTools } from "@/config/tools.config";
+import { ChevronRight, CircleCheck, ShieldCheck } from "lucide-react";
+import { SITE, TOOLS, getCategory, getTool, relatedTools } from "@/config/tools.config";
 import { CATEGORY_STYLE } from "@/lib/category-style";
 import { cn } from "@/lib/cn";
 import { Badge } from "@/components/ui/Badge";
@@ -37,7 +37,6 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
   const category = getCategory(tool.category)!;
   const style = CATEGORY_STYLE[tool.category];
   const related = relatedTools(tool, 6);
-  const faqs = [...tool.faqs, ...COMMON_FAQS];
 
   const jsonLd = [
     {
@@ -55,11 +54,6 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
       "@type": "HowTo",
       name: `How to use ${tool.title}`,
       step: tool.steps.map((text, i) => ({ "@type": "HowToStep", position: i + 1, text })),
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
     },
   ];
 
@@ -128,21 +122,6 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
                 </li>
               ))}
             </ul>
-          </section>
-
-          <section aria-labelledby="faq">
-            <h2 id="faq" className="text-2xl font-semibold tracking-tight text-fg">Frequently asked questions</h2>
-            <div className="mt-5 divide-y divide-border rounded-2xl border border-border bg-surface">
-              {faqs.map((f) => (
-                <details key={f.q} className="group px-5">
-                  <summary className="flex cursor-pointer items-center justify-between gap-4 py-4 font-medium text-fg">
-                    {f.q}
-                    <ChevronDown className="size-4 shrink-0 text-fg-subtle group-open:rotate-180" aria-hidden />
-                  </summary>
-                  <p className="pb-4 text-sm leading-relaxed text-fg-muted">{f.a}</p>
-                </details>
-              ))}
-            </div>
           </section>
         </div>
 
