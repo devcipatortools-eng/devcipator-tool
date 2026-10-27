@@ -33,7 +33,7 @@ export function Field({
 }
 
 export const INPUT_CLASS =
-  "h-9 w-full rounded-lg border border-border bg-surface px-3 text-sm text-fg placeholder:text-fg-subtle hover:border-border-strong focus:border-primary focus:outline-none";
+  "h-9 w-full rounded-lg border border-border bg-surface px-3 text-sm text-fg pointer-coarse:h-11 pointer-coarse:text-base placeholder:text-fg-subtle hover:border-border-strong focus:border-primary focus:outline-none";
 
 export function TextInput({ className, ...rest }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(INPUT_CLASS, className)} {...rest} />;
@@ -119,7 +119,7 @@ export function Slider({
         value={value}
         disabled={disabled}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="h-2 w-full cursor-pointer disabled:opacity-50 pointer-coarse:h-8"
+        className="h-2 w-full cursor-pointer disabled:opacity-50 pointer-coarse:h-11"
       />
     </Field>
   );
@@ -185,7 +185,7 @@ export function Segmented<T extends string>({
             title={o.title}
             onClick={() => onChange(o.value)}
             className={cn(
-              "flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium cursor-pointer",
+              "flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium cursor-pointer pointer-coarse:min-h-11",
               active ? "bg-surface text-fg shadow-card ring-1 ring-border" : "text-fg-muted hover:text-fg",
             )}
           >
@@ -241,7 +241,7 @@ export function ColorInput({ label, value, onChange }: { label: ReactNode; value
         type="color"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-9 w-full cursor-pointer rounded-lg border border-border bg-surface p-1"
+        className="h-9 w-full cursor-pointer rounded-lg border border-border bg-surface p-1 pointer-coarse:h-11"
       />
     </Field>
   );
@@ -260,7 +260,7 @@ export function Notice({
     info: "bg-primary-soft text-primary-strong border-primary/25",
     warning: "bg-warning-soft text-fg border-warning/50",
     danger: "bg-danger-soft text-danger border-danger/30",
-    success: "bg-success-soft text-success border-success/30",
+    success: "bg-success-soft text-success-strong border-success/30",
   }[tone];
   return (
     <div role={tone === "danger" ? "alert" : undefined} className={cn("rounded-lg border px-3 py-2 text-sm", styles, className)}>

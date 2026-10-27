@@ -32,7 +32,7 @@ function ResultRow({ file }: { file: OutputFile }) {
           </p>
           <p className="text-xs text-fg-muted">
             {formatBytes(file.blob.size)}
-            {file.note && <span className="ml-1.5 font-medium text-success">{file.note}</span>}
+            {file.note && <span className="ml-1.5 font-medium text-success-strong">{file.note}</span>}
           </p>
         </div>
         <Button size="sm" variant="secondary" icon={<Download className="size-4" />} onClick={() => downloadBlob(file.blob, file.name)} aria-label={`Download ${file.name}`}>
@@ -59,7 +59,7 @@ export function ResultList({ results, zipName = "devcipator-files.zip", message 
 
   return (
     <section aria-label="Results" className="flex flex-col gap-3 rounded-2xl border border-success/30 bg-success-soft/60 p-3">
-      <p className="flex items-center gap-2 px-1 text-sm font-semibold text-success">
+      <p className="flex items-center gap-2 px-1 text-sm font-semibold text-success-strong">
         <CircleCheck className="size-4" aria-hidden />
         {results.length > 0 ? `${results.length} file${results.length === 1 ? "" : "s"} ready` : "Finished"}
       </p>

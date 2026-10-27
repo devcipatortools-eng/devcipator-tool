@@ -50,7 +50,7 @@ export default async function CategoryPage({ params }: PageProps<"/category/[cat
       </ul>
       <nav aria-label="Other categories" className="mt-14 flex flex-wrap gap-2">
         {CATEGORIES.filter((c) => c.id !== cat.id).map((c) => (
-          <Link key={c.id} href={`/category/${c.id}`} className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-fg-muted hover:text-fg">
+          <Link key={c.id} href={`/category/${c.id}`} className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-fg-muted hover:text-fg pointer-coarse:min-h-11">
             <span className={cn("size-2 rounded-full", CATEGORY_STYLE[c.id].solid)} aria-hidden />
             {c.title}
           </Link>

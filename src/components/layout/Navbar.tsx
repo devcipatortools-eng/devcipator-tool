@@ -112,7 +112,7 @@ export function Navbar() {
             onClick={() => setMobileOpen((o) => !o)}
             aria-expanded={mobileOpen}
             aria-label="Open menu"
-            className="inline-flex size-9 items-center justify-center rounded-lg border border-border bg-surface text-fg-muted lg:hidden cursor-pointer"
+            className="inline-flex size-9 items-center justify-center rounded-lg border border-border bg-surface text-fg-muted lg:hidden cursor-pointer pointer-coarse:size-11"
           >
             {mobileOpen ? <X className="size-4" /> : <Menu className="size-4" />}
           </button>

@@ -10,7 +10,7 @@ function Chip({ tool }: { tool: ToolConfig }) {
   return (
     <Link
       href={`/tools/${tool.slug}`}
-      className="inline-flex shrink-0 items-center gap-2 rounded-full border border-border bg-surface py-1 pl-1 pr-3.5 text-sm font-medium text-fg hover:border-border-strong hover:bg-surface-2"
+      className="inline-flex shrink-0 items-center gap-2 rounded-full border border-border bg-surface py-1 pl-1 pr-3.5 text-sm font-medium text-fg hover:border-border-strong hover:bg-surface-2 pointer-coarse:min-h-11"
     >
       <ToolIcon tool={tool} size="sm" className="size-7 rounded-full [&>svg]:size-3.5" />
       {tool.title}

@@ -135,7 +135,7 @@ export default function CompressImage() {
               <span className="text-xs text-fg-muted tabular-nums">
                 {formatBytes(selected.file.size)} → {preview.busy ? "…" : preview.result ? formatBytes(preview.result.size) : "—"}
                 {delta != null && !preview.busy && (
-                  <span className={delta >= 0 ? "ml-1.5 font-semibold text-success" : "ml-1.5 font-semibold text-danger"}>{delta >= 0 ? `−${delta}%` : `+${-delta}%`}</span>
+                  <span className={delta >= 0 ? "ml-1.5 font-semibold text-success-strong" : "ml-1.5 font-semibold text-danger"}>{delta >= 0 ? `−${delta}%` : `+${-delta}%`}</span>
                 )}
               </span>
             )

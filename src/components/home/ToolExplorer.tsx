@@ -84,7 +84,7 @@ export function ToolExplorer() {
                     aria-selected={active}
                     onClick={() => setFilter(tab.id)}
                     className={cn(
-                      "inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium cursor-pointer",
+                      "inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium cursor-pointer pointer-coarse:min-h-11",
                       active ? "border-fg bg-fg text-bg" : "border-border bg-surface text-fg-muted hover:text-fg hover:border-border-strong",
                     )}
                   >

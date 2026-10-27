@@ -76,7 +76,7 @@ export function ToolLayout({
         <div className="flex flex-col gap-5 rounded-2xl border border-border bg-surface p-5 shadow-card">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-fg-subtle">Settings</h2>
-            <button type="button" onClick={reset} className="inline-flex items-center gap-1 text-xs font-medium text-fg-muted hover:text-fg cursor-pointer pointer-coarse:-my-3 pointer-coarse:py-3">
+            <button type="button" onClick={reset} className="inline-flex items-center gap-1 text-xs font-medium text-fg-muted hover:text-fg cursor-pointer pointer-coarse:-my-3.5 pointer-coarse:py-3.5">
               <RotateCcw className="size-3.5" aria-hidden /> Start over
             </button>
           </div>

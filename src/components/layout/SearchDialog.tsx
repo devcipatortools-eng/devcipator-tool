@@ -65,7 +65,7 @@ export function SearchDialog() {
       <button
         type="button"
         onClick={open}
-        className="inline-flex h-9 items-center gap-2 rounded-lg border border-border bg-surface px-2.5 text-sm text-fg-muted hover:border-border-strong hover:text-fg cursor-pointer md:w-56"
+        className="inline-flex h-9 items-center gap-2 rounded-lg border border-border bg-surface px-2.5 text-sm text-fg-muted hover:border-border-strong hover:text-fg cursor-pointer md:w-56 pointer-coarse:h-11 pointer-coarse:min-w-11 pointer-coarse:justify-center"
         aria-label="Search tools"
       >
         <Search className="size-4" aria-hidden />

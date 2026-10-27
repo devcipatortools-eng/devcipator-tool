@@ -99,7 +99,7 @@ export default function CaseConverter() {
             setActive(null);
           }}
           placeholder="Paste or type text, then pick a case above…"
-          className="min-h-[320px] w-full resize-y rounded-lg border border-border bg-surface-2 p-4 font-mono text-sm leading-relaxed text-fg placeholder:text-fg-subtle focus:border-primary focus:outline-none"
+          className="min-h-[320px] w-full resize-y rounded-lg border border-border bg-surface-2 p-4 font-mono text-sm leading-relaxed text-fg pointer-coarse:text-base placeholder:text-fg-subtle focus:border-primary focus:outline-none"
           aria-label="Text to convert"
           autoFocus
         />

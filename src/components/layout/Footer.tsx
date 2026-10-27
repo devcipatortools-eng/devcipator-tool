@@ -7,9 +7,9 @@ import { Logo } from "./Logo";
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-border bg-surface">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
-        <div className="flex flex-col gap-4">
+    <footer className="mt-16 border-t border-border bg-surface sm:mt-24">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-1 px-4 py-10 sm:gap-10 sm:px-6 sm:py-14 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
+        <div className="col-span-2 mb-4 flex flex-col gap-4 sm:col-span-1 sm:mb-0">
           <Logo />
           <p className="max-w-xs text-sm text-fg-muted">{SITE.description}</p>
           <p className="inline-flex items-center gap-2 text-sm text-fg-muted">
@@ -19,10 +19,11 @@ export function Footer() {
         </div>
         {CATEGORIES.map((cat) => (
           <div key={cat.id}>
-            <h2 className={cn("mb-3 text-xs font-semibold uppercase tracking-wider", CATEGORY_STYLE[cat.id].text)}>
-              <Link href={`/category/${cat.id}`} className="pointer-coarse:inline-block pointer-coarse:py-2">{cat.title}</Link>
+            <h2 className={cn("text-xs font-semibold uppercase tracking-wider sm:mb-3", CATEGORY_STYLE[cat.id].text)}>
+              <Link href={`/category/${cat.id}`} className="inline-block py-3.5 sm:py-0 pointer-coarse:sm:py-2">{cat.title}</Link>
             </h2>
-            <ul className="flex flex-col gap-1.5 pointer-coarse:gap-0">
+            {/* The full tool list is too long for phones; they get the category links only. */}
+            <ul className="hidden flex-col gap-1.5 pointer-coarse:gap-0 sm:flex">
               {toolsInCategory(cat.id).map((tool) => (
                 <li key={tool.slug}>
                   <Link href={`/tools/${tool.slug}`} className="inline-block text-sm text-fg-muted hover:text-fg pointer-coarse:py-2.5">

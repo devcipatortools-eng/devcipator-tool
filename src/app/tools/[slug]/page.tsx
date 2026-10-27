@@ -66,7 +66,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
           <nav aria-label="Breadcrumb" className="flex items-center gap-1 text-sm text-fg-subtle">
             <Link href="/" className="-my-3 py-3 hover:text-fg">Home</Link>
             <ChevronRight className="size-3.5" aria-hidden />
-            <Link href={`/category/${category.id}`} className="-my-3 py-3 hover:text-fg">{category.label}</Link>
+            <Link href={`/category/${category.id}`} className="-mx-2 -my-3 px-2 py-3 hover:text-fg">{category.label}</Link>
             <ChevronRight className="size-3.5" aria-hidden />
             <span className="text-fg-muted" aria-current="page">{tool.title}</span>
           </nav>
@@ -104,9 +104,9 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
             <h2 id="how-to" className="text-2xl font-semibold tracking-tight text-fg">How to use {tool.title}</h2>
             <ol className="mt-5 grid gap-4 md:grid-cols-3">
               {tool.steps.map((step, i) => (
-                <li key={i} className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5">
-                  <span className="flex size-8 items-center justify-center rounded-full bg-primary-soft font-mono text-sm font-semibold text-primary-strong">{i + 1}</span>
-                  <p className="text-sm text-fg">{step}</p>
+                <li key={i} className="flex items-start gap-3 rounded-2xl border border-border bg-surface p-4 md:flex-col md:p-5">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-soft font-mono text-sm font-semibold text-primary-strong">{i + 1}</span>
+                  <p className="text-sm text-fg max-md:pt-1.5">{step}</p>
                 </li>
               ))}
             </ol>
@@ -143,7 +143,8 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
         </aside>
       </div>
 
-      <section aria-labelledby="more" className="mx-auto mt-16 max-w-7xl px-4 sm:px-6">
+      {/* Below lg the related-tools list already sits right above, so this would repeat it. */}
+      <section aria-labelledby="more" className="mx-auto mt-16 hidden max-w-7xl px-4 sm:px-6 lg:block">
         <div className="flex items-end justify-between gap-4">
           <h2 id="more" className="text-xl font-semibold tracking-tight text-fg">More {category.title}</h2>
           <Link href={`/category/${category.id}`} className={cn("text-sm font-medium pointer-coarse:-my-3 pointer-coarse:py-3", style.text)}>
