@@ -57,11 +57,11 @@ export default function RotatePdf() {
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium">Rotate all pages</span>
             <div className="grid grid-cols-3 gap-2">
-              <Button variant="secondary" size="sm" icon={<RotateCcw className="size-4" />} onClick={() => rotateAll(-90)} disabled={!doc}>
-                90°
+              <Button variant="secondary" size="sm" icon={<RotateCcw className="size-4" />} onClick={() => rotateAll(-90)} disabled={!doc} aria-label="Rotate all pages left 90°">
+                Left
               </Button>
-              <Button variant="secondary" size="sm" icon={<RotateCw className="size-4" />} onClick={() => rotateAll(90)} disabled={!doc}>
-                90°
+              <Button variant="secondary" size="sm" icon={<RotateCw className="size-4" />} onClick={() => rotateAll(90)} disabled={!doc} aria-label="Rotate all pages right 90°">
+                Right
               </Button>
               <Button variant="secondary" size="sm" onClick={() => rotateAll(180)} disabled={!doc}>
                 180°
@@ -82,7 +82,7 @@ export default function RotatePdf() {
         {error && <Notice tone="danger">{error}</Notice>}
         {loading && <p className="py-10 text-center text-sm text-fg-subtle">Loading pages…</p>}
         {doc && (
-          <ol className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+          <ol className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {rotations.map((rot, i) => (
               <li key={i} className={cn("flex flex-col gap-2 rounded-xl border bg-surface-2 p-2", rot ? "border-primary" : "border-border")}>
                 <div className="flex aspect-[3/4] items-center justify-center overflow-hidden rounded-lg bg-white">
@@ -94,10 +94,10 @@ export default function RotatePdf() {
                     {rot !== 0 && <span className="text-primary-strong"> · {rot}°</span>}
                   </span>
                   <div className="flex">
-                    <IconButton label={`Rotate page ${i + 1} left`} onClick={() => rotatePage(i, -90)} className="size-7">
+                    <IconButton label={`Rotate page ${i + 1} left`} onClick={() => rotatePage(i, -90)} className="size-7 pointer-coarse:size-9">
                       <RotateCcw className="size-3.5" />
                     </IconButton>
-                    <IconButton label={`Rotate page ${i + 1} right`} onClick={() => rotatePage(i, 90)} className="size-7">
+                    <IconButton label={`Rotate page ${i + 1} right`} onClick={() => rotatePage(i, 90)} className="size-7 pointer-coarse:size-9">
                       <RotateCw className="size-3.5" />
                     </IconButton>
                   </div>

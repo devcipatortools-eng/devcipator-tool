@@ -70,7 +70,7 @@ export function SearchDialog() {
       >
         <Search className="size-4" aria-hidden />
         <span className="hidden md:inline">Search {TOOLS.length} tools…</span>
-        <kbd className="ml-auto hidden rounded border border-border bg-surface-2 px-1.5 font-mono text-[10px] text-fg-subtle md:inline">
+        <kbd className="ml-auto hidden rounded border border-border bg-surface-2 px-1.5 font-mono text-[10px] text-fg-subtle md:pointer-fine:inline">
           Ctrl K
         </kbd>
       </button>

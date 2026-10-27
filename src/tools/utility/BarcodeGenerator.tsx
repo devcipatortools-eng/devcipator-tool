@@ -69,7 +69,7 @@ export default function BarcodeGenerator() {
   }
 
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+    <div className="grid items-start gap-6 md:grid-cols-[minmax(0,1fr)_300px] lg:grid-cols-[minmax(0,1fr)_360px]">
       <div className="flex flex-col gap-4">
         <Panel title="Preview">
           <div className="flex min-h-56 items-center justify-center overflow-x-auto rounded-xl bg-surface-2 p-6">
@@ -86,7 +86,7 @@ export default function BarcodeGenerator() {
           </Button>
         </div>
       </div>
-      <aside className="flex flex-col gap-5 rounded-2xl border border-border bg-surface p-5 shadow-card lg:sticky lg:top-20" aria-label="Settings">
+      <aside className="flex flex-col gap-5 rounded-2xl border border-border bg-surface p-5 shadow-card md:sticky md:top-20" aria-label="Settings">
         <Select
           label="Format"
           value={format}

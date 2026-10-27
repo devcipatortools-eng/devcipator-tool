@@ -128,7 +128,7 @@ export default function ColorPicker() {
   if (!file) return <FileDropzone tool={tool} onFiles={(f) => setFile(f[0])} label="Drop an image to pick colours from" />;
 
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+    <div className="grid items-start gap-6 md:grid-cols-[minmax(0,1fr)_300px] lg:grid-cols-[minmax(0,1fr)_340px]">
       <div className="flex flex-col gap-4">
         <Panel title="Click to pick a colour" actions={<button type="button" onClick={() => setFile(null)} className="text-xs font-medium text-fg-muted hover:text-fg cursor-pointer">Change image</button>}>
           {error && <p className="text-sm text-danger">{error}</p>}
@@ -177,7 +177,7 @@ export default function ColorPicker() {
           </ul>
         </Panel>
       </div>
-      <aside className="flex flex-col gap-4 lg:sticky lg:top-20" aria-label="Picked colour">
+      <aside className="flex flex-col gap-4 md:sticky md:top-20" aria-label="Picked colour">
         <Panel title="Picked colour">
           {picked ? (
             <div className="flex flex-col gap-3">

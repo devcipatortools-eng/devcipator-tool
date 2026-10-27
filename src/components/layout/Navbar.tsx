@@ -133,7 +133,7 @@ export function Navbar() {
               <ul className="grid grid-cols-1 gap-0.5 sm:grid-cols-2">
                 {toolsInCategory(cat.id).map((tool) => (
                   <li key={tool.slug}>
-                    <Link href={`/tools/${tool.slug}`} className="block rounded-lg px-2 py-1.5 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg">
+                    <Link href={`/tools/${tool.slug}`} className="block rounded-lg px-2 py-1.5 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg pointer-coarse:py-2.5">
                       {tool.title}
                     </Link>
                   </li>

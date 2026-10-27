@@ -96,7 +96,7 @@ export default function SplitPdf() {
         {error && <Notice tone="danger">{error}</Notice>}
         {loading && <p className="py-10 text-center text-sm text-fg-subtle">Loading pages…</p>}
         {doc && (
-          <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6">
+          <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             {Array.from({ length: numPages }, (_, i) => {
               const g = pageGroup.get(i);
               return (

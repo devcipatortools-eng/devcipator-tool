@@ -81,11 +81,11 @@ export default function OrganizePdf() {
       options={
         <>
           <div className="grid grid-cols-2 gap-2">
-            <Button variant="secondary" icon={<RotateCcw className="size-4" />} onClick={() => rotateAll(-90)} disabled={!doc}>
-              Rotate all
+            <Button variant="secondary" icon={<RotateCcw className="size-4" />} onClick={() => rotateAll(-90)} disabled={!doc} aria-label="Rotate all pages left">
+              All left
             </Button>
-            <Button variant="secondary" icon={<RotateCw className="size-4" />} onClick={() => rotateAll(90)} disabled={!doc}>
-              Rotate all
+            <Button variant="secondary" icon={<RotateCw className="size-4" />} onClick={() => rotateAll(90)} disabled={!doc} aria-label="Rotate all pages right">
+              All right
             </Button>
           </div>
           <Button
@@ -103,12 +103,12 @@ export default function OrganizePdf() {
         </>
       }
     >
-      <Panel title="Pages" actions={<span className="text-xs text-fg-subtle">Drag to reorder · hover for actions</span>}>
+      <Panel title="Pages" actions={<span className="text-xs text-fg-subtle">Drag or use the arrows to reorder</span>}>
         {needsPassword && <Notice tone="warning">This PDF is password-protected. Remove the password in your PDF reader first.</Notice>}
         {error && <Notice tone="danger">{error}</Notice>}
         {loading && <p className="py-10 text-center text-sm text-fg-subtle">Loading pages…</p>}
         {doc && (
-          <ol className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+          <ol className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {pages.map((p, i) => (
               <li
                 key={p.index}
@@ -132,26 +132,26 @@ export default function OrganizePdf() {
                     <span className="absolute inset-0 flex items-center justify-center bg-danger-soft/80 text-sm font-semibold text-danger">Deleted</span>
                   )}
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-y-1">
                   <span className="pl-1 text-xs text-fg-muted tabular-nums">
                     {i + 1}
                     {p.index !== i && <span className="text-fg-subtle"> (was {p.index + 1})</span>}
                   </span>
-                  <div className="flex">
-                    <IconButton label="Move left" onClick={() => move(i, i - 1)} disabled={i === 0} className="size-7">
+                  <div className="flex flex-wrap">
+                    <IconButton label="Move left" onClick={() => move(i, i - 1)} disabled={i === 0} className="size-7 pointer-coarse:size-8">
                       <ArrowLeft className="size-3.5" />
                     </IconButton>
-                    <IconButton label="Move right" onClick={() => move(i, i + 1)} disabled={i === pages.length - 1} className="size-7">
+                    <IconButton label="Move right" onClick={() => move(i, i + 1)} disabled={i === pages.length - 1} className="size-7 pointer-coarse:size-8">
                       <ArrowRight className="size-3.5" />
                     </IconButton>
-                    <IconButton label="Rotate clockwise" onClick={() => update(i, { rotate: (p.rotate + 90) % 360 })} className="size-7">
+                    <IconButton label="Rotate clockwise" onClick={() => update(i, { rotate: (p.rotate + 90) % 360 })} className="size-7 pointer-coarse:size-8">
                       <RotateCw className="size-3.5" />
                     </IconButton>
                     <IconButton
                       label={p.deleted ? "Restore page" : "Delete page"}
                       onClick={() => update(i, { deleted: !p.deleted })}
                       active={p.deleted}
-                      className="size-7"
+                      className="size-7 pointer-coarse:size-8"
                     >
                       {p.deleted ? <Undo2 className="size-3.5" /> : <Trash2 className="size-3.5" />}
                     </IconButton>

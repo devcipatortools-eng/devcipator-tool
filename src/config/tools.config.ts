@@ -61,14 +61,16 @@ export interface ToolConfig {
 export interface CategoryConfig {
   id: ToolCategory;
   label: string;
+  /** Section heading, e.g. "PDF tools" ("Utility tools", not "Utilities tools"). */
+  title: string;
   tagline: string;
 }
 
 export const CATEGORIES: CategoryConfig[] = [
-  { id: "document", label: "PDF", tagline: "Merge, split, sign, organize and convert PDFs." },
-  { id: "image", label: "Image", tagline: "Compress, resize, crop, convert and edit images." },
-  { id: "audio", label: "Audio", tagline: "Cut, join, speed up, boost and reverse audio." },
-  { id: "utility", label: "Utilities", tagline: "QR codes, barcodes, text and colour tools." },
+  { id: "document", label: "PDF", title: "PDF tools", tagline: "Merge, split, sign, organize and convert PDFs." },
+  { id: "image", label: "Image", title: "Image tools", tagline: "Compress, resize, crop, convert and edit images." },
+  { id: "audio", label: "Audio", title: "Audio tools", tagline: "Cut, join, speed up, boost and reverse audio." },
+  { id: "utility", label: "Utilities", title: "Utility tools", tagline: "QR codes, barcodes, text and colour tools." },
 ];
 
 const PDF = ["application/pdf", ".pdf"];

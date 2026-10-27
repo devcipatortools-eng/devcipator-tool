@@ -25,7 +25,7 @@ export default function WordCounter() {
   ];
 
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+    <div className="grid items-start gap-6 md:grid-cols-[minmax(0,1fr)_300px] lg:grid-cols-[minmax(0,1fr)_340px]">
       <Panel
         title="Your text"
         actions={
@@ -49,7 +49,7 @@ export default function WordCounter() {
         />
       </Panel>
 
-      <aside className="flex flex-col gap-4 lg:sticky lg:top-20" aria-label="Statistics">
+      <aside className="flex flex-col gap-4 md:sticky md:top-20" aria-label="Statistics">
         <ul className="grid grid-cols-2 gap-3">
           {cards.map((c) => (
             <li key={c.label} className="rounded-2xl border border-border bg-surface p-4 shadow-card">

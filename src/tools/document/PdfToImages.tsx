@@ -114,7 +114,7 @@ export default function PdfToImages() {
         {error && <Notice tone="danger">{error}</Notice>}
         {loading && <p className="py-10 text-center text-sm text-fg-subtle">Loading pages…</p>}
         {doc && (
-          <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6">
+          <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             {Array.from({ length: numPages }, (_, i) => (
               <li key={i} className="flex flex-col items-center gap-1.5">
                 <div className={`w-full overflow-hidden rounded-lg border bg-white p-1 ${selected.has(i) ? "border-primary ring-2 ring-primary/40" : "border-border opacity-40"}`}>

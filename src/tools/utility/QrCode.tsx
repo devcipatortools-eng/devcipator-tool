@@ -98,7 +98,7 @@ function Generator() {
   }
 
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
+    <div className="grid items-start gap-6 md:grid-cols-[minmax(0,1fr)_320px] lg:grid-cols-[minmax(0,1fr)_380px]">
       <Panel title="Content">
         <div className="flex flex-col gap-4">
           <Segmented
@@ -189,7 +189,7 @@ function Generator() {
           />
         </div>
       </Panel>
-      <aside className="flex flex-col gap-4 lg:sticky lg:top-20">
+      <aside className="flex flex-col gap-4 md:sticky md:top-20">
         <Panel title="Preview">
           <div className="bg-checker flex aspect-square items-center justify-center rounded-xl p-4">
             <canvas ref={canvasRef} className={empty || error ? "hidden" : "block h-auto max-w-full rounded-md"} />

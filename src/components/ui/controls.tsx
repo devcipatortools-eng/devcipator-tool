@@ -119,7 +119,7 @@ export function Slider({
         value={value}
         disabled={disabled}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="h-2 w-full cursor-pointer disabled:opacity-50"
+        className="h-2 w-full cursor-pointer disabled:opacity-50 pointer-coarse:h-8"
       />
     </Field>
   );

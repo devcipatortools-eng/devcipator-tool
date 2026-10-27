@@ -20,12 +20,12 @@ export function Footer() {
         {CATEGORIES.map((cat) => (
           <div key={cat.id}>
             <h2 className={cn("mb-3 text-xs font-semibold uppercase tracking-wider", CATEGORY_STYLE[cat.id].text)}>
-              <Link href={`/category/${cat.id}`}>{cat.label} tools</Link>
+              <Link href={`/category/${cat.id}`} className="pointer-coarse:inline-block pointer-coarse:py-2">{cat.title}</Link>
             </h2>
-            <ul className="flex flex-col gap-1.5">
+            <ul className="flex flex-col gap-1.5 pointer-coarse:gap-0">
               {toolsInCategory(cat.id).map((tool) => (
                 <li key={tool.slug}>
-                  <Link href={`/tools/${tool.slug}`} className="text-sm text-fg-muted hover:text-fg">
+                  <Link href={`/tools/${tool.slug}`} className="inline-block text-sm text-fg-muted hover:text-fg pointer-coarse:py-2.5">
                     {tool.title}
                   </Link>
                 </li>
@@ -38,9 +38,9 @@ export function Footer() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-fg-subtle sm:flex-row sm:px-6">
           <p>© {SITE.name}. All processing happens locally in your browser.</p>
           <nav className="flex gap-5" aria-label="Legal">
-            <Link href="/privacy" className="hover:text-fg">Privacy</Link>
-            <Link href="/terms" className="hover:text-fg">Terms</Link>
-            <Link href="/#all-tools" className="hover:text-fg">All tools</Link>
+            <Link href="/privacy" className="hover:text-fg pointer-coarse:py-3">Privacy</Link>
+            <Link href="/terms" className="hover:text-fg pointer-coarse:py-3">Terms</Link>
+            <Link href="/#all-tools" className="hover:text-fg pointer-coarse:py-3">All tools</Link>
           </nav>
         </div>
       </div>

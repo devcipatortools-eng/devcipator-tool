@@ -25,7 +25,7 @@ export default function Home() {
               className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-6 hover:border-border-strong"
             >
               <span className={cn("h-1 w-10 rounded-full", CATEGORY_STYLE[cat.id].solid)} aria-hidden />
-              <h2 className="text-lg font-semibold text-fg">{cat.label} tools</h2>
+              <h2 className="text-lg font-semibold text-fg">{cat.title}</h2>
               <p className="text-sm text-fg-muted">{cat.tagline}</p>
               <p className={cn("mt-auto text-sm font-medium", CATEGORY_STYLE[cat.id].text)}>
                 {toolsInCategory(cat.id).length} tools →

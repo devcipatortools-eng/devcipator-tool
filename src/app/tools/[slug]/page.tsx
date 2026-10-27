@@ -64,9 +64,9 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
       <div className="border-b border-border bg-surface">
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:px-6">
           <nav aria-label="Breadcrumb" className="flex items-center gap-1 text-sm text-fg-subtle">
-            <Link href="/" className="hover:text-fg">Home</Link>
+            <Link href="/" className="-my-3 py-3 hover:text-fg">Home</Link>
             <ChevronRight className="size-3.5" aria-hidden />
-            <Link href={`/category/${category.id}`} className="hover:text-fg">{category.label}</Link>
+            <Link href={`/category/${category.id}`} className="-my-3 py-3 hover:text-fg">{category.label}</Link>
             <ChevronRight className="size-3.5" aria-hidden />
             <span className="text-fg-muted" aria-current="page">{tool.title}</span>
           </nav>
@@ -85,7 +85,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
                   <ShieldCheck className="size-4 text-success" aria-hidden /> Processed on your device
                 </span>
                 <span className={cn("inline-flex items-center gap-1.5", style.text)}>
-                  <span className={cn("size-2 rounded-full", style.solid)} aria-hidden /> {category.label} tool
+                  <span className={cn("size-2 rounded-full", style.solid)} aria-hidden /> {category.title}
                 </span>
                 {tool.acceptLabel && <span>Accepts {tool.acceptLabel}</span>}
               </p>
@@ -98,7 +98,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
         <ToolLoader slug={tool.slug} />
       </div>
 
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 pt-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 pt-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="flex flex-col gap-12">
           <section aria-labelledby="how-to">
             <h2 id="how-to" className="text-2xl font-semibold tracking-tight text-fg">How to use {tool.title}</h2>
@@ -145,8 +145,8 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
 
       <section aria-labelledby="more" className="mx-auto mt-16 max-w-7xl px-4 sm:px-6">
         <div className="flex items-end justify-between gap-4">
-          <h2 id="more" className="text-xl font-semibold tracking-tight text-fg">More {category.label.toLowerCase()} tools</h2>
-          <Link href={`/category/${category.id}`} className={cn("text-sm font-medium", style.text)}>
+          <h2 id="more" className="text-xl font-semibold tracking-tight text-fg">More {category.title}</h2>
+          <Link href={`/category/${category.id}`} className={cn("text-sm font-medium pointer-coarse:-my-3 pointer-coarse:py-3", style.text)}>
             View all →
           </Link>
         </div>

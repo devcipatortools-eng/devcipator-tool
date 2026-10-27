@@ -69,14 +69,14 @@ export function ToolLayout({
   }
 
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+    <div className="grid items-start gap-6 md:grid-cols-[minmax(0,1fr)_300px] lg:grid-cols-[minmax(0,1fr)_360px]">
       <div className="min-w-0">{children}</div>
 
-      <aside className="flex flex-col gap-4 lg:sticky lg:top-20" aria-label="Settings">
+      <aside className="flex flex-col gap-4 md:sticky md:top-20" aria-label="Settings">
         <div className="flex flex-col gap-5 rounded-2xl border border-border bg-surface p-5 shadow-card">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-fg-subtle">Settings</h2>
-            <button type="button" onClick={reset} className="inline-flex items-center gap-1 text-xs font-medium text-fg-muted hover:text-fg cursor-pointer">
+            <button type="button" onClick={reset} className="inline-flex items-center gap-1 text-xs font-medium text-fg-muted hover:text-fg cursor-pointer pointer-coarse:-my-3 pointer-coarse:py-3">
               <RotateCcw className="size-3.5" aria-hidden /> Start over
             </button>
           </div>
