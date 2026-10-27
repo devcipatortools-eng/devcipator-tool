@@ -138,20 +138,21 @@ export default function OrganizePdf() {
                     {p.index !== i && <span className="text-fg-subtle"> (was {p.index + 1})</span>}
                   </span>
                   <div className="flex flex-wrap">
-                    <IconButton label="Move left" onClick={() => move(i, i - 1)} disabled={i === 0} className="size-7 pointer-coarse:size-8">
+                    <IconButton label="Move left" onClick={() => move(i, i - 1)} disabled={i === 0} size="sm" className="pointer-coarse:size-8">
                       <ArrowLeft className="size-3.5" />
                     </IconButton>
-                    <IconButton label="Move right" onClick={() => move(i, i + 1)} disabled={i === pages.length - 1} className="size-7 pointer-coarse:size-8">
+                    <IconButton label="Move right" onClick={() => move(i, i + 1)} disabled={i === pages.length - 1} size="sm" className="pointer-coarse:size-8">
                       <ArrowRight className="size-3.5" />
                     </IconButton>
-                    <IconButton label="Rotate clockwise" onClick={() => update(i, { rotate: (p.rotate + 90) % 360 })} className="size-7 pointer-coarse:size-8">
+                    <IconButton label="Rotate clockwise" onClick={() => update(i, { rotate: (p.rotate + 90) % 360 })} size="sm" className="pointer-coarse:size-8">
                       <RotateCw className="size-3.5" />
                     </IconButton>
                     <IconButton
                       label={p.deleted ? "Restore page" : "Delete page"}
                       onClick={() => update(i, { deleted: !p.deleted })}
                       active={p.deleted}
-                      className="size-7 pointer-coarse:size-8"
+                      size="sm"
+                      className="pointer-coarse:size-8"
                     >
                       {p.deleted ? <Undo2 className="size-3.5" /> : <Trash2 className="size-3.5" />}
                     </IconButton>

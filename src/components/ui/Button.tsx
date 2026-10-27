@@ -18,6 +18,8 @@ const SIZES: Record<Size, string> = {
   lg: "h-12 px-6 text-base gap-2 rounded-xl",
 };
 
+const ICON_SIZES: Record<Size, string> = { sm: "size-7", md: "size-8", lg: "size-9" };
+
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
@@ -60,16 +62,18 @@ export function IconButton({
   className,
   children,
   active,
+  size = "md",
   type = "button",
   ...rest
-}: ButtonHTMLAttributes<HTMLButtonElement> & { label: string; active?: boolean }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { label: string; active?: boolean; size?: Size }) {
   return (
     <button
       type={type}
       aria-label={label}
       title={label}
       className={cn(
-        "inline-flex size-8 shrink-0 items-center justify-center rounded-lg border cursor-pointer",
+        "inline-flex shrink-0 items-center justify-center rounded-lg border cursor-pointer",
+        ICON_SIZES[size],
         "disabled:opacity-40 disabled:cursor-not-allowed",
         active
           ? "border-primary bg-primary-soft text-primary-strong"

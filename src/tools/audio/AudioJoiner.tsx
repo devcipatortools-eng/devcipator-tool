@@ -109,9 +109,9 @@ export default function AudioJoiner() {
           onRemove={list.remove}
           renderMeta={(item) => {
             const d = durations.get(item.file);
-            if (d === undefined) return "· reading…";
-            if (d === "error") return <span className="text-danger">· cannot decode</span>;
-            return `· ${formatDuration(d)}`;
+            if (d === undefined) return "reading…";
+            if (d === "error") return <span className="text-danger">cannot decode</span>;
+            return formatDuration(d);
           }}
         />
       </Panel>

@@ -77,7 +77,7 @@ export function Navbar() {
                           href={`/tools/${tool.slug}`}
                           className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg"
                         >
-                          <ToolIcon tool={tool} size="sm" className="size-6 rounded-md [&>svg]:size-3.5" />
+                          <ToolIcon tool={tool} size="xs" />
                           {tool.title}
                         </Link>
                       </li>

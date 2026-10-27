@@ -72,10 +72,10 @@ export default function MergePdf() {
           renderLeading={(item) => <PdfFileThumb file={item.file} />}
           renderMeta={(item) => {
             const info = infos.get(item.file);
-            if (!info) return "· reading…";
-            if (info === "error") return <span className="text-danger">· unreadable</span>;
-            if (info.encrypted) return <span className="text-danger">· password protected</span>;
-            return `· ${info.pageCount} page${info.pageCount === 1 ? "" : "s"}`;
+            if (!info) return "reading…";
+            if (info === "error") return <span className="text-danger">unreadable</span>;
+            if (info.encrypted) return <span className="text-danger">password protected</span>;
+            return `${info.pageCount} page${info.pageCount === 1 ? "" : "s"}`;
           }}
         />
       </Panel>

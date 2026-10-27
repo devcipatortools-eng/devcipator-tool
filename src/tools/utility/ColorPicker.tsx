@@ -145,7 +145,7 @@ export default function ColorPicker() {
               aria-label="Image — click to pick a colour"
             />
             <div
-              className={cn("pointer-events-none absolute flex flex-col items-center gap-1", !hover && "hidden")}
+              className={cn("pointer-events-none absolute flex-col items-center gap-1", hover ? "flex" : "hidden")}
               style={hover ? { left: hover.x + 18, top: Math.max(0, hover.y - ZOOM_SIZE - 18) } : undefined}
             >
               <canvas ref={zoomRef} width={ZOOM_SIZE} height={ZOOM_SIZE} className="rounded-full border-2 border-white shadow-pop" style={{ width: ZOOM_SIZE / 1.2, height: ZOOM_SIZE / 1.2 }} />

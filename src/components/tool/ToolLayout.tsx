@@ -119,7 +119,7 @@ export function Panel({ title, actions, children, className }: { title?: ReactNo
       {(title || actions) && (
         <header className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3">
           {title && <h2 className="text-sm font-semibold text-fg">{title}</h2>}
-          {actions && <div className="flex items-center gap-1">{actions}</div>}
+          {actions && <div className="flex flex-wrap items-center gap-x-1 gap-y-2">{actions}</div>}
         </header>
       )}
       <div className="p-4">{children}</div>

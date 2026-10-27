@@ -48,21 +48,28 @@ export function SortableFileList({ items, onMove, onRemove, renderLeading, rende
             setOverIndex(null);
           }}
           className={cn(
-            "flex items-center gap-3 rounded-xl border bg-surface p-2.5",
+            "flex items-center gap-2 rounded-xl border bg-surface p-2.5 sm:gap-3",
             overIndex === i && dragIndex !== i ? "border-primary bg-primary-soft" : "border-border",
             dragIndex === i && "opacity-50",
           )}
         >
-          <GripVertical className="size-4 shrink-0 cursor-grab text-fg-subtle" aria-hidden />
-          <span className="w-6 shrink-0 text-center font-mono text-xs text-fg-subtle tabular-nums">{i + 1}</span>
+          {/* Drag-and-drop needs a mouse, so touch screens rely on the arrow buttons instead. */}
+          <GripVertical className="size-4 shrink-0 cursor-grab text-fg-subtle pointer-coarse:hidden" aria-hidden />
+          <span className="w-5 shrink-0 text-center font-mono text-xs text-fg-subtle tabular-nums sm:w-6">{i + 1}</span>
           {renderLeading?.(item, i)}
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-fg" title={item.file.name}>
               {item.file.name}
             </p>
-            <p className="text-xs text-fg-muted">
-              {formatBytes(item.file.size)}
-              {renderMeta && <span className="ml-1.5">{renderMeta(item, i)}</span>}
+            {/* Phones stack size and details; wider screens show them on one line. */}
+            <p className="flex flex-col text-xs text-fg-muted sm:flex-row sm:gap-x-1.5">
+              <span className="whitespace-nowrap">{formatBytes(item.file.size)}</span>
+              {renderMeta && (
+                <span className="whitespace-nowrap">
+                  <span className="hidden sm:inline" aria-hidden>· </span>
+                  {renderMeta(item, i)}
+                </span>
+              )}
             </p>
           </div>
           <div className="flex shrink-0 items-center">
