@@ -69,7 +69,12 @@ function Generator() {
     let cancelled = false;
     import("qrcode")
       .then((QR) => QR.toCanvas(canvas, payload, options))
-      .then(() => !cancelled && setErrState({ key: errKey, message: null }))
+      .then(() => {
+        // qrcode sets an inline pixel width/height, which stretches the code once max-w-full narrows it.
+        canvas.style.removeProperty("width");
+        canvas.style.removeProperty("height");
+        if (!cancelled) setErrState({ key: errKey, message: null });
+      })
       .catch(
         (err) =>
           !cancelled &&
