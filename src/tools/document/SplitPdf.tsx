@@ -70,7 +70,10 @@ export default function SplitPdf() {
           <Segmented
             label="Split mode"
             value={mode}
-            onChange={setMode}
+            onChange={(m) => {
+              setMode(m);
+              processor.reset();
+            }}
             options={[
               { value: "ranges", label: "Ranges" },
               { value: "chunks", label: "Every N" },
@@ -79,12 +82,18 @@ export default function SplitPdf() {
           />
           {mode === "ranges" && (
             <Field label="Page ranges" hint="Comma-separated; each range becomes one file. “5-” means page 5 to the end.">
-              <TextInput value={ranges} onChange={(e) => setRanges(e.target.value)} placeholder="1-3, 5, 8-" aria-label="Page ranges" />
+              <TextInput value={ranges} onChange={(e) => {
+                  setRanges(e.target.value);
+                  processor.reset();
+                }} placeholder="1-3, 5, 8-" aria-label="Page ranges" />
             </Field>
           )}
           {mode === "chunks" && (
             <Field label="Pages per file">
-              <NumberInput value={chunk} onChange={setChunk} min={1} max={numPages || 1} label="Pages per file" />
+              <NumberInput value={chunk} onChange={(v) => {
+                  setChunk(v);
+                  processor.reset();
+                }} min={1} max={numPages || 1} label="Pages per file" />
             </Field>
           )}
           {parsed.error && <Notice tone="danger">{parsed.error}</Notice>}

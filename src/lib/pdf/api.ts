@@ -31,6 +31,8 @@ export interface DisplayRect {
   height: number;
 }
 
+export type TotalMode = "file" | "numbered" | "last";
+
 export type NumberPosition = "top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right";
 
 export interface PageNumberOptions {
@@ -46,14 +48,15 @@ export interface PageNumberOptions {
   fromPage: number;
   /** Number printed on that first numbered page. */
   startAt: number;
-  /** Whether {total} counts only numbered pages. */
-  totalOnlyNumbered: boolean;
+  /** What {total} prints: pages in the file, pages that get a number, or the last number printed. */
+  totalMode: TotalMode;
 }
 
-/** Value of {total}. Never below the last printed number, so "Page 7 of 4" cannot happen. */
-export function pageNumberTotal(pageCount: number, o: Pick<PageNumberOptions, "fromPage" | "startAt" | "totalOnlyNumbered">): number {
-  const last = o.startAt + pageCount - o.fromPage - 1;
-  return o.totalOnlyNumbered ? last : Math.max(pageCount, last);
+/** Value of {total} for the chosen TotalMode. */
+export function pageNumberTotal(pageCount: number, o: Pick<PageNumberOptions, "fromPage" | "startAt" | "totalMode">): number {
+  if (o.totalMode === "numbered") return pageCount - o.fromPage;
+  if (o.totalMode === "last") return o.startAt + pageCount - o.fromPage - 1;
+  return pageCount;
 }
 
 /** Operations implemented by pdf.worker.ts. */

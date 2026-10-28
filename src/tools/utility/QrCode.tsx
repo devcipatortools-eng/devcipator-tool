@@ -258,7 +258,7 @@ function Scanner() {
   return (
     <div className="grid items-start gap-6 lg:grid-cols-2">
       <div className="flex flex-col gap-3">
-        <FileDropzone tool={tool} onFiles={(f) => setFile(f[0])} variant={file ? "compact" : "hero"} label={file ? "Scan another image" : "Drop an image containing a QR code"} />
+        <FileDropzone tool={tool} onFiles={(f) => setFile(f[0])} onErrors={(e) => e.length > 0 && setFile(null)} variant={file ? "compact" : "hero"} label={file ? "Scan another image" : "Drop an image containing a QR code"} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         {url && <img src={url} alt="Uploaded" className="bg-checker max-h-96 rounded-xl border border-border object-contain" />}
       </div>

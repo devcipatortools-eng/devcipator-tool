@@ -90,6 +90,7 @@ export default function ResizeImage() {
         label: `Resize ${files.length > 1 ? `${files.length} images` : "image"}`,
         icon: <Scaling className="size-5" />,
         disabled: mode === "pixels" ? !(width > 0 && shownHeight > 0) : !(percent > 0),
+        hint: mode === "pixels" ? "Width and height must be at least 1 px." : "Scale must be above 0%.",
         onClick: resize,
       }}
       options={

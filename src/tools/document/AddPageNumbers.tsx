@@ -10,7 +10,7 @@ import { withExtension } from "@/lib/files";
 import { Panel, ToolLayout } from "@/components/tool/ToolLayout";
 import { PdfPageCanvas } from "@/components/pdf/PdfPageCanvas";
 import { IconButton } from "@/components/ui/Button";
-import { ColorInput, Field, NumberInput, Notice, Select, Slider, TextInput, Toggle } from "@/components/ui/controls";
+import { ColorInput, Field, NumberInput, Notice, Select, Slider, TextInput } from "@/components/ui/controls";
 import { cn } from "@/lib/cn";
 
 const FORMATS = [
@@ -36,7 +36,7 @@ export default function AddPageNumbers() {
     margin: 28,
     fromPage: 0,
     startAt: 1,
-    totalOnlyNumbered: false,
+    totalMode: "file",
   });
   const [previewPage, setPreviewPage] = useState(1);
   const [pageSize, setPageSize] = useState<{ width: number; height: number } | null>(null);
@@ -118,7 +118,18 @@ export default function AddPageNumbers() {
               <NumberInput value={opts.startAt} onChange={(v) => set({ startAt: Number.isFinite(v) ? v : 1 })} min={0} label="First number" />
             </Field>
           </div>
-          {opts.fromPage > 0 && <Toggle label="Total counts numbered pages only" checked={opts.totalOnlyNumbered} onChange={(totalOnlyNumbered) => set({ totalOnlyNumbered })} />}
+          {format.includes("{total}") && (opts.fromPage > 0 || opts.startAt !== 1) && (
+            <Select
+              label="{total} shows"
+              value={opts.totalMode}
+              onChange={(totalMode) => set({ totalMode })}
+              options={[
+                { value: "file", label: `Pages in this file (${numPages})` },
+                { value: "numbered", label: `Numbered pages only (${numPages - opts.fromPage})` },
+                { value: "last", label: `Last page number (${opts.startAt + numPages - opts.fromPage - 1})` },
+              ]}
+            />
+          )}
         </>
       }
     >

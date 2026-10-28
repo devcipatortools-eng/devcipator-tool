@@ -205,6 +205,16 @@ input[type="range"] {
   accent-color: var(--primary);
 }
 
+/* Outline the swatch so dark colours stay visible on dark surfaces. */
+input[type="color"]::-webkit-color-swatch {
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+}
+input[type="color"]::-moz-color-swatch {
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+}
+
 input[type="checkbox"],
 input[type="radio"] {
   accent-color: var(--primary);

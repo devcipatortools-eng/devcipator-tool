@@ -16,12 +16,23 @@ const WORD = /[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu;
 
 const HAS_ALNUM = /[\p{L}\p{N}]/u;
 
+/** Abbreviations whose full stop doesn't end a sentence ("Dr. Smith", "e.g. this"). */
+const ABBREVIATIONS = new Set("mr mrs ms dr prof sr jr st mt vs etc e.g i.e approx dept est fig inc ltd co no vol a.m p.m u.s".split(" "));
+const endsWithAbbreviation = (s: string) => ABBREVIATIONS.has((s.match(/(\S+)\.$/)?.[1] ?? "").replace(/^[^\p{L}]+/u, "").toLowerCase());
+
 export function textStats(text: string): TextStats {
   // Like Word and Google Docs: a word is any whitespace-separated token, so "$3.50", "a.b@c.com" and "e-mail" count once.
   const words = (text.match(/\S+/g) ?? []).filter((w) => HAS_ALNUM.test(w)).map((w) => w.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, ""));
   const trimmed = text.trim();
   // A sentence ends at . ! ? … (plus closing quotes/brackets) followed by whitespace, so decimals and emails don't split it.
-  const sentences = trimmed ? trimmed.split(/(?<=[.!?…]+["'”’)\]]*)\s+/u).filter((s) => HAS_ALNUM.test(s)).length : 0;
+  let sentences = 0;
+  if (trimmed) {
+    const parts = trimmed.split(/(?<=[.!?…]+["'”’)\]]*)\s+/u);
+    parts.forEach((part, i) => {
+      // A part ending in an abbreviation runs on into the next one, so it isn't a sentence of its own.
+      if (HAS_ALNUM.test(part) && !(i < parts.length - 1 && endsWithAbbreviation(part))) sentences++;
+    });
+  }
   const paragraphs = trimmed ? trimmed.split(/\n\s*\n/).filter((p) => p.trim()).length : 0;
   const letters = words.reduce((n, w) => n + w.length, 0);
   return {
@@ -91,7 +102,10 @@ function convertLine(line: string, style: CaseStyle): string {
         const lower = w.toLowerCase();
         const before = line.slice(0, offset);
         const first = !/[\p{L}\p{N}]/u.test(before) || /[.!?:]["'”’)\]]*\s+$/u.test(before);
-        return !first && SMALL_WORDS.has(lower) ? lower : cap(w);
+        if (!first && SMALL_WORDS.has(lower)) return lower;
+        // Keep deliberate inner capitals ("myXMLParser" → "MyXMLParser"); all-caps words are still normalised.
+        const mixed = /\p{Ll}/u.test(w) && /\p{Lu}/u.test(w.slice(1));
+        return mixed ? w.charAt(0).toUpperCase() + w.slice(1) : cap(w);
       });
     }
     default: {

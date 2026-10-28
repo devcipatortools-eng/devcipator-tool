@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { RotateCcw, Square } from "lucide-react";
 import { getTool } from "@/config/tools.config";
 import type { Processor } from "@/hooks/useProcessor";
@@ -55,16 +55,19 @@ export function ToolLayout({
   zipName,
   dropLabel,
 }: ToolLayoutProps) {
+  // The upload screen unmounts once a file is accepted, so files rejected in the same drop are reported here.
+  const [rejected, setRejected] = useState<string[]>([]);
   const tool = getTool(slug);
   if (!tool) throw new Error(`Unknown tool: ${slug}`);
   const running = processor.status === "running";
 
   if (fileCount === 0) {
-    return <FileDropzone tool={tool} onFiles={onFiles} label={dropLabel} />;
+    return <FileDropzone tool={tool} onFiles={onFiles} label={dropLabel} onErrors={setRejected} />;
   }
 
   function reset() {
     processor.reset();
+    setRejected([]);
     onReset();
   }
 
@@ -80,6 +83,15 @@ export function ToolLayout({
               <RotateCcw className="size-3.5" aria-hidden /> Start over
             </button>
           </div>
+
+          {rejected.length > 0 && (
+            <Notice tone="danger">
+              {rejected.join(" ")}{" "}
+              <button type="button" onClick={() => setRejected([])} className="font-medium underline cursor-pointer">
+                Dismiss
+              </button>
+            </Notice>
+          )}
 
           {options}
 

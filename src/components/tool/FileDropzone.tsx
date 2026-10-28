@@ -18,13 +18,15 @@ export interface FileDropzoneProps {
   multiple?: boolean;
   /** Overrides tool.accept. */
   accept?: string[];
+  /** Called after every drop with the rejection messages (empty when all files were accepted). */
+  onErrors?: (errors: string[]) => void;
 }
 
 /**
  * Drag-and-drop + click-to-browse file picker (react-dropzone) with our own
  * type/size validation so error messages are consistent across tools.
  */
-export function FileDropzone({ tool, onFiles, variant = "hero", label, multiple, accept }: FileDropzoneProps) {
+export function FileDropzone({ tool, onFiles, variant = "hero", label, multiple, accept, onErrors }: FileDropzoneProps) {
   const [errors, setErrors] = useState<string[]>([]);
   const allowMany = multiple ?? tool.multiple;
   const acceptList = accept ?? tool.accept;
@@ -36,6 +38,7 @@ export function FileDropzone({ tool, onFiles, variant = "hero", label, multiple,
       if (files.length === 0) return;
       const { accepted, errors } = validateFiles(allowMany ? files : files.slice(0, 1), acceptList, tool.maxSizeMB);
       setErrors(errors);
+      onErrors?.(errors);
       if (accepted.length) onFiles(accepted);
     },
   });

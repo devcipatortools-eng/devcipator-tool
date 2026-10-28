@@ -32,7 +32,10 @@ export default function MergePdf() {
       slug="merge-pdf"
       fileCount={list.items.length}
       onFiles={list.add}
-      onReset={list.clear}
+      onReset={() => {
+        list.clear();
+        setName("merged");
+      }}
       processor={processor}
       action={{
         label: files.length < 2 ? "Merge PDFs" : `Merge ${files.length} PDFs`,

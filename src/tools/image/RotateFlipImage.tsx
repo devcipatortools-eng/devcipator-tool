@@ -17,7 +17,7 @@ type Rotation = 0 | 90 | 180 | 270;
 export default function RotateFlipImage() {
   const list = useFileList(true);
   const processor = useProcessor();
-  const [rotate, setRotate] = useState<Rotation>(90);
+  const [rotate, setRotate] = useState<Rotation>(0);
   const [flipH, setFlipH] = useState(false);
   const [flipV, setFlipV] = useState(false);
   const [output, setOutput] = useState<"same" | OutputFormat>("same");

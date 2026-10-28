@@ -39,9 +39,9 @@ export function Footer() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-fg-subtle sm:flex-row sm:px-6">
           <p>© {SITE.name}. All processing happens locally in your browser.</p>
           <nav className="flex gap-5" aria-label="Legal">
-            <Link href="/privacy" className="hover:text-fg pointer-coarse:py-3">Privacy</Link>
-            <Link href="/terms" className="hover:text-fg pointer-coarse:py-3">Terms</Link>
-            <Link href="/#all-tools" className="hover:text-fg pointer-coarse:py-3">All tools</Link>
+            <Link href="/privacy" className="hover:text-fg max-sm:py-3 pointer-coarse:py-3">Privacy</Link>
+            <Link href="/terms" className="hover:text-fg max-sm:py-3 pointer-coarse:py-3">Terms</Link>
+            <Link href="/#all-tools" className="hover:text-fg max-sm:py-3 pointer-coarse:py-3">All tools</Link>
           </nav>
         </div>
       </div>

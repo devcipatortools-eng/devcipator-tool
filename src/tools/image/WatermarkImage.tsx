@@ -34,6 +34,17 @@ interface Settings {
 }
 
 const POSITIONS: Pos[] = ["tl", "tc", "tr", "ml", "mc", "mr", "bl", "bc", "br"];
+const POSITION_LABELS: Record<Pos, string> = {
+  tl: "Top left",
+  tc: "Top centre",
+  tr: "Top right",
+  ml: "Middle left",
+  mc: "Centre",
+  mr: "Middle right",
+  bl: "Bottom left",
+  bc: "Bottom centre",
+  br: "Bottom right",
+};
 
 function drawWatermark(ctx: CanvasRenderingContext2D, w: number, h: number, s: Settings, logo: ImageBitmap | HTMLImageElement | null) {
   ctx.save();
@@ -225,7 +236,8 @@ export default function WatermarkImage() {
                   <button
                     key={p}
                     type="button"
-                    aria-label={`Position ${p}`}
+                    aria-label={POSITION_LABELS[p]}
+                    aria-pressed={s.position === p}
                     onClick={() => set({ position: p })}
                     className={cn("aspect-square rounded border cursor-pointer", s.position === p ? "border-primary bg-primary" : "border-border bg-surface-2 hover:border-border-strong")}
                   />
