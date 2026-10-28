@@ -35,7 +35,7 @@ export default function RotateFlipImage() {
         report(i / items.length, `Processing ${file.name}`);
         const format = output === "same" ? formatFor(file.type) : output;
         const res = await transformImage(file, { rotate, flipH, flipV, format, quality: 0.95 }, { signal });
-        out.push({ name: withExtension(file.name, EXT[format], "-rotated"), blob: res.blob, note: `${res.width}×${res.height}` });
+        out.push({ name: withExtension(file.name, EXT[format], rotate ? "-rotated" : "-flipped"), blob: res.blob, note: `${res.width}×${res.height}` });
       }
       return out;
     });

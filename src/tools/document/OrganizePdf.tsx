@@ -93,7 +93,10 @@ export default function OrganizePdf() {
             variant="ghost"
             icon={<Undo2 className="size-4" />}
             disabled={!changed}
-            onClick={() => setPages(Array.from({ length: numPages }, (_, i) => ({ index: i, rotate: 0, deleted: false })))}
+            onClick={() => {
+              setPages(Array.from({ length: numPages }, (_, i) => ({ index: i, rotate: 0, deleted: false })));
+              processor.reset();
+            }}
           >
             Reset all changes
           </Button>

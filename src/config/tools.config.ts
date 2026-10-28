@@ -421,7 +421,7 @@ export const TOOLS: ToolConfig[] = [
     acceptLabel: AUDIO_LABEL,
     maxSizeMB: 200,
     multiple: false,
-    keywords: ["volume booster", "normalize audio", "make audio louder"],
+    keywords: ["volume booster", "normalize audio", "make audio louder", "boost mp3 volume"],
     steps: ["Drop an audio file.", "Choose Boost (percentage) or Normalize (target peak).", "Preview, process and download."],
     features: ["Up to 300% gain", "Peak normalization to a target dB", "Peak limiter to avoid clipping", "Live preview through a GainNode"],
     faqs: [{ q: "Boost or normalize?", a: "Normalize raises the loudest peak to the target — safe and predictable. Boost pushes further and relies on the limiter." }],

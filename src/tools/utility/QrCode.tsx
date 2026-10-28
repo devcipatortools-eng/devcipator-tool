@@ -197,7 +197,7 @@ function Generator() {
       <aside className="flex flex-col gap-4 md:sticky md:top-20">
         <Panel title="Preview">
           <div className="bg-checker flex aspect-square items-center justify-center rounded-xl p-4">
-            <canvas ref={canvasRef} className={empty || error ? "hidden" : "block h-auto max-w-full rounded-md"} />
+            <canvas ref={canvasRef} className={empty || error ? "hidden" : "block aspect-square h-auto max-w-full rounded-md"} />
             {empty && <p className="text-sm text-fg-subtle">Enter content to generate a code.</p>}
           </div>
           {error && <Notice tone="danger" className="mt-3">{error}</Notice>}

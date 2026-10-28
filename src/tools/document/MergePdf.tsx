@@ -35,7 +35,7 @@ export default function MergePdf() {
       onReset={list.clear}
       processor={processor}
       action={{
-        label: `Merge ${files.length} PDFs`,
+        label: files.length < 2 ? "Merge PDFs" : `Merge ${files.length} PDFs`,
         icon: <Combine className="size-5" />,
         disabled: files.length < 2 || problems.length > 0,
         hint: problems.length ? "Remove the highlighted files first." : "Add at least two PDFs.",

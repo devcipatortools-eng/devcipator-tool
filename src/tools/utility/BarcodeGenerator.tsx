@@ -9,14 +9,26 @@ import { ColorInput, Field, Notice, Select, Slider, TextInput, Toggle } from "@/
 
 type Format = "CODE128" | "EAN13" | "EAN8" | "UPC" | "CODE39" | "ITF14";
 
-const FORMATS: Array<{ value: Format; label: string; example: string; hint: string }> = [
+const FORMATS: Array<{ value: Format; label: string; example: string; hint: string; digits?: [number, number] }> = [
   { value: "CODE128", label: "Code 128", example: "DEV-2024-001", hint: "Any ASCII text. The most versatile general-purpose barcode." },
-  { value: "EAN13", label: "EAN-13", example: "590123412345", hint: "12 digits (check digit added) or 13 digits with a valid check digit. Retail products." },
-  { value: "EAN8", label: "EAN-8", example: "9638507", hint: "7 digits (check digit added) or 8 digits. Small retail packages." },
-  { value: "UPC", label: "UPC-A", example: "03600029145", hint: "11 digits (check digit added) or 12 digits. North American retail." },
+  { value: "EAN13", label: "EAN-13", example: "590123412345", hint: "12 digits (check digit added) or 13 digits with a valid check digit. Retail products.", digits: [12, 13] },
+  { value: "EAN8", label: "EAN-8", example: "9638507", hint: "7 digits (check digit added) or 8 digits. Small retail packages.", digits: [7, 8] },
+  { value: "UPC", label: "UPC-A", example: "03600029145", hint: "11 digits (check digit added) or 12 digits. North American retail.", digits: [11, 12] },
   { value: "CODE39", label: "Code 39", example: "CODE39", hint: "Uppercase letters, digits, space and - . $ / + %." },
-  { value: "ITF14", label: "ITF-14", example: "1540014128876", hint: "13 digits (check digit added) or 14 digits. Shipping cartons." },
+  { value: "ITF14", label: "ITF-14", example: "1540014128876", hint: "13 digits (check digit added) or 14 digits. Shipping cartons.", digits: [13, 14] },
 ];
+
+/** Says why JsBarcode rejected a value, so the error is actionable. */
+function invalidReason(meta: (typeof FORMATS)[number], value: string): string {
+  if (meta.digits) {
+    const [short, full] = meta.digits;
+    if (/D/.test(value)) return `${meta.label} uses digits only.`;
+    if (value.length !== short && value.length !== full) return `${meta.label} needs ${short} or ${full} digits; this has ${value.length}.`;
+    return "The last digit is not a valid check digit. Remove it and it is calculated for you.";
+  }
+  if (meta.value === "CODE39") return "Code 39 only supports uppercase letters, digits, space and - . $ / + %.";
+  return "Code 128 only supports ASCII characters.";
+}
 
 export default function BarcodeGenerator() {
   const [format, setFormat] = useState<Format>("CODE128");
@@ -99,7 +111,7 @@ export default function BarcodeGenerator() {
         <Field label="Value" hint={meta.hint}>
           <TextInput value={value} onChange={(e) => setValue(e.target.value)} className="font-mono" aria-label="Barcode value" />
         </Field>
-        {!valid && value.length > 0 && <Notice tone="danger">This value is not valid for {meta.label}.</Notice>}
+        {!valid && value.length > 0 && <Notice tone="danger">{invalidReason(meta, value)}</Notice>}
         <Slider label="Bar width" value={barWidth} onChange={setBarWidth} min={1} max={4} step={0.5} format={(v) => `${v}px`} />
         <Slider label="Height" value={height} onChange={setHeight} min={30} max={200} format={(v) => `${v}px`} />
         <Toggle label="Show text under bars" checked={showText} onChange={setShowText} />

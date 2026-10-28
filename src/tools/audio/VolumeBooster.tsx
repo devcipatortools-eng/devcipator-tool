@@ -86,7 +86,10 @@ export default function VolumeBooster() {
           <Segmented
             label="Mode"
             value={mode}
-            onChange={setMode}
+            onChange={(m) => {
+              setMode(m);
+              processor.reset();
+            }}
             options={[
               { value: "boost", label: "Boost" },
               { value: "normalize", label: "Normalize" },

@@ -51,7 +51,7 @@ export function PlayButton({ playing, onPlay, onStop, label = "Play", disabled }
 export function AudioMeta({ buffer }: { buffer: AudioBuffer }) {
   return (
     <span className="whitespace-nowrap font-mono text-xs text-fg-muted tabular-nums">
-      {formatDuration(buffer.duration, true)} · {buffer.numberOfChannels === 1 ? "mono" : `${buffer.numberOfChannels} ch`} · {(buffer.sampleRate / 1000).toFixed(1)} kHz
+      {formatDuration(buffer.duration, true)} · {buffer.numberOfChannels === 1 ? "mono" : `${buffer.numberOfChannels} ch`}
     </span>
   );
 }

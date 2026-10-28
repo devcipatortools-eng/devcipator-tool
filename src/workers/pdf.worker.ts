@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 import { PDFDocument, PDFPage, StandardFonts, degrees, rgb } from "pdf-lib";
 import { exposeWorker, type WorkerContext } from "@/lib/worker-rpc";
-import type { DisplayRect, OrganizedPage, PageNumberOptions, PdfApi, RasterPage } from "@/lib/pdf/api";
+import { pageNumberTotal, type DisplayRect, type OrganizedPage, type PageNumberOptions, type PdfApi, type RasterPage } from "@/lib/pdf/api";
 
 function friendlyLoadError(err: unknown): Error {
   const msg = err instanceof Error ? err.message : String(err);
@@ -132,8 +132,7 @@ exposeWorker<PdfApi>({
     const font = await doc.embedFont(StandardFonts.Helvetica);
     const color = hexToRgb(o.color);
     const pages = doc.getPages();
-    const numbered = pages.length - o.fromPage;
-    const total = o.totalOnlyNumbered ? numbered + o.startAt - 1 : pages.length;
+    const total = pageNumberTotal(pages.length, o);
     pages.forEach((page, i) => {
       if (i < o.fromPage) return;
       ctx.progress(i / pages.length, `Numbering page ${i + 1}`);

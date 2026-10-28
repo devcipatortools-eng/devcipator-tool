@@ -72,14 +72,21 @@ export function medianCut(pixels: Uint8ClampedArray, count: number): Array<{ rgb
     });
     if (target < 0 || widest === 0) break;
     const box = boxes[target].sort((a, b) => a[channel] - b[channel]);
-    const mid = box.length >> 1;
+    // Split where the value changes nearest the median, so a flat area isn't halved into two identical swatches.
+    const v = box[box.length >> 1][channel];
+    let mid = box.findIndex((p) => p[channel] >= v);
+    if (mid <= 0) mid = box.findIndex((p) => p[channel] > v);
     boxes = [...boxes.slice(0, target), box.slice(0, mid), box.slice(mid), ...boxes.slice(target + 1)];
   }
-  return boxes
-    .filter((b) => b.length > 0)
-    .map((box) => {
-      const sum = box.reduce((acc, p) => [acc[0] + p[0], acc[1] + p[1], acc[2] + p[2]], [0, 0, 0]);
-      return { rgb: sum.map((v) => Math.round(v / box.length)) as Rgb, share: box.length / colors.length };
-    })
-    .sort((a, b) => b.share - a.share);
+  // Boxes can still average to the same colour; merge those into one swatch.
+  const merged = new Map<string, { rgb: Rgb; share: number }>();
+  for (const box of boxes) {
+    if (box.length === 0) continue;
+    const sum = box.reduce((acc, p) => [acc[0] + p[0], acc[1] + p[1], acc[2] + p[2]], [0, 0, 0]);
+    const rgb = sum.map((v) => Math.round(v / box.length)) as Rgb;
+    const key = rgb.join();
+    const prev = merged.get(key);
+    merged.set(key, { rgb, share: (prev?.share ?? 0) + box.length / colors.length });
+  }
+  return [...merged.values()].sort((a, b) => b.share - a.share);
 }

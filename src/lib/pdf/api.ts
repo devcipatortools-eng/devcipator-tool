@@ -50,6 +50,12 @@ export interface PageNumberOptions {
   totalOnlyNumbered: boolean;
 }
 
+/** Value of {total}. Never below the last printed number, so "Page 7 of 4" cannot happen. */
+export function pageNumberTotal(pageCount: number, o: Pick<PageNumberOptions, "fromPage" | "startAt" | "totalOnlyNumbered">): number {
+  const last = o.startAt + pageCount - o.fromPage - 1;
+  return o.totalOnlyNumbered ? last : Math.max(pageCount, last);
+}
+
 /** Operations implemented by pdf.worker.ts. */
 export type PdfApi = {
   info(data: ArrayBuffer): PdfInfo;

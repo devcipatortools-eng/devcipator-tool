@@ -42,7 +42,7 @@ export default function ReverseAudio() {
       }}
       processor={processor}
       allowAddMore
-      action={{ label: "Download reversed audio", icon: <Rewind className="size-5" />, disabled: !reversed, onClick: exportReversed }}
+      action={{ label: "Export reversed audio", icon: <Rewind className="size-5" />, disabled: !reversed, onClick: exportReversed }}
       options={<ExportOptions value={exportSettings} onChange={setExportSettings} />}
     >
       <Panel

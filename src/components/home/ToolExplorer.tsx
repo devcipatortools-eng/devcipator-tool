@@ -52,7 +52,7 @@ export function ToolExplorer() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search tools, e.g. “mp3”"
               aria-label="Search tools"
-              className="h-14 w-full rounded-2xl border border-border-strong bg-surface pl-12 pr-12 text-base text-fg shadow-pop placeholder:text-fg-subtle focus:border-primary focus:outline-none"
+              className="h-14 w-full rounded-2xl border border-border-strong bg-surface pl-12 pr-12 text-base [&::-webkit-search-cancel-button]:appearance-none text-fg shadow-pop placeholder:text-fg-subtle focus:border-primary focus:outline-none"
             />
             {query && (
               <button

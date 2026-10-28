@@ -42,7 +42,7 @@ export function usePdfDocument(file: File | null | undefined): PdfDocumentState 
       .catch((err) => {
         if (cancelled) return;
         const needsPassword = err instanceof PasswordRequiredError;
-        setLoaded({ file, doc: null, error: needsPassword ? null : errorMessage(err), needsPassword });
+        setLoaded({ file, doc: null, error: needsPassword ? null : `This file is damaged or not a valid PDF (${errorMessage(err)}).`, needsPassword });
       });
     return () => {
       cancelled = true;

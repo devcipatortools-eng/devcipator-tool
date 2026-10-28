@@ -14,10 +14,14 @@ export interface TextStats {
 
 const WORD = /[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu;
 
+const HAS_ALNUM = /[\p{L}\p{N}]/u;
+
 export function textStats(text: string): TextStats {
-  const words = text.match(WORD) ?? [];
+  // Like Word and Google Docs: a word is any whitespace-separated token, so "$3.50", "a.b@c.com" and "e-mail" count once.
+  const words = (text.match(/\S+/g) ?? []).filter((w) => HAS_ALNUM.test(w)).map((w) => w.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, ""));
   const trimmed = text.trim();
-  const sentences = trimmed ? (trimmed.match(/[^.!?…]+(?:[.!?…]+|$)/g) ?? []).filter((s) => /[\p{L}\p{N}]/u.test(s)).length : 0;
+  // A sentence ends at . ! ? … (plus closing quotes/brackets) followed by whitespace, so decimals and emails don't split it.
+  const sentences = trimmed ? trimmed.split(/(?<=[.!?…]+["'”’)\]]*)\s+/u).filter((s) => HAS_ALNUM.test(s)).length : 0;
   const paragraphs = trimmed ? trimmed.split(/\n\s*\n/).filter((p) => p.trim()).length : 0;
   const letters = words.reduce((n, w) => n + w.length, 0);
   return {
@@ -64,6 +68,7 @@ const SMALL_WORDS = new Set("a an and as at but by en for if in nor of on or per
 /** Splits identifiers and prose into words: "parseHTTPResponse_v2" → parse, HTTP, Response, v2. */
 export function splitWords(text: string): string[] {
   return text
+    .replace(/(\p{L})['’](\p{L})/gu, "$1$2") // "dog's" → dogs, not dog_s
     .replace(/([\p{Ll}\p{N}])(\p{Lu})/gu, "$1 $2")
     .replace(/(\p{Lu}+)(\p{Lu}\p{Ll})/gu, "$1 $2")
     .split(/[^\p{L}\p{N}]+/u)
@@ -81,10 +86,11 @@ function convertLine(line: string, style: CaseStyle): string {
     case "sentence":
       return line.toLowerCase().replace(/(^\s*\p{L}|[.!?]\s+\p{L})/gu, (m) => m.toUpperCase());
     case "title": {
-      let index = 0;
-      return line.replace(/[\p{L}\p{N}]+(?:['’][\p{L}]+)*/gu, (w) => {
+      // Small words stay lowercase except at the start of the line or of a sentence.
+      return line.replace(/[\p{L}\p{N}]+(?:['’][\p{L}]+)*/gu, (w, offset: number) => {
         const lower = w.toLowerCase();
-        const first = index++ === 0;
+        const before = line.slice(0, offset);
+        const first = !/[\p{L}\p{N}]/u.test(before) || /[.!?:]["'”’)\]]*\s+$/u.test(before);
         return !first && SMALL_WORDS.has(lower) ? lower : cap(w);
       });
     }

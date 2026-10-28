@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight, Hash } from "lucide-react";
 import { useProcessor } from "@/hooks/useProcessor";
 import { usePdfDocument } from "@/hooks/usePdfDocument";
 import { pdfBlob, pdfWorker } from "@/lib/pdf/client";
-import type { NumberPosition, PageNumberOptions } from "@/lib/pdf/api";
+import { pageNumberTotal, type NumberPosition, type PageNumberOptions } from "@/lib/pdf/api";
 import { withExtension } from "@/lib/files";
 import { Panel, ToolLayout } from "@/components/tool/ToolLayout";
 import { PdfPageCanvas } from "@/components/pdf/PdfPageCanvas";
@@ -59,7 +59,7 @@ export default function AddPageNumbers() {
 
   const index = previewPage - 1;
   const numbered = numPages - opts.fromPage;
-  const total = opts.totalOnlyNumbered ? numbered + opts.startAt - 1 : numPages;
+  const total = pageNumberTotal(numPages, opts);
   const label = index >= opts.fromPage ? format.replaceAll("{n}", String(opts.startAt + index - opts.fromPage)).replaceAll("{total}", String(total)) : null;
   const scale = pageSize ? PREVIEW_WIDTH / pageSize.width : 1;
   const [vertical, horizontal] = opts.position.split("-");

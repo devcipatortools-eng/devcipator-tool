@@ -44,10 +44,11 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg/90 backdrop-blur supports-[backdrop-filter]:bg-bg/75">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6" aria-label="Main">
+      <nav className="relative mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6" aria-label="Main">
         <Logo />
 
-        <div className="relative ml-4 hidden lg:block" ref={menuRef}>
+        {/* Not positioned: the menu anchors to the nav, so it spans the bar instead of overflowing from the button. */}
+        <div className="ml-4 hidden lg:block" ref={menuRef}>
           <button
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
@@ -60,7 +61,7 @@ export function Navbar() {
             All tools <ChevronDown className="size-4" aria-hidden />
           </button>
           {menuOpen && (
-            <div className="absolute left-0 top-11 grid w-[min(1040px,calc(100vw-3rem))] grid-cols-4 gap-6 rounded-2xl border border-border bg-surface p-5 shadow-pop">
+            <div className="absolute inset-x-6 top-14 mx-auto grid max-w-[1040px] grid-cols-4 gap-6 rounded-2xl border border-border bg-surface p-5 shadow-pop">
               {CATEGORIES.map((cat) => (
                 <div key={cat.id}>
                   <Link

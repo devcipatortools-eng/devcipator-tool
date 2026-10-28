@@ -40,6 +40,8 @@ export default function ResizeImage() {
 
   const first = files[0] ? dims.get(files[0]) : undefined;
   const ratio = first ? first.width / first.height : 16 / 9;
+  // While locked, the output height follows the width, so show that instead of the last typed value.
+  const shownHeight = lock && first ? Math.max(1, Math.round(width / ratio)) : height;
 
   function targetFor(file: File): { width: number; height: number } | null {
     const d = dims.get(file);
@@ -87,7 +89,7 @@ export default function ResizeImage() {
       action={{
         label: `Resize ${files.length > 1 ? `${files.length} images` : "image"}`,
         icon: <Scaling className="size-5" />,
-        disabled: mode === "pixels" ? !(width > 0 && height > 0) : !(percent > 0),
+        disabled: mode === "pixels" ? !(width > 0 && shownHeight > 0) : !(percent > 0),
         onClick: resize,
       }}
       options={
@@ -133,12 +135,15 @@ export default function ResizeImage() {
                     }}
                   />
                 </Field>
-                <IconButton label={lock ? "Unlock aspect ratio" : "Lock aspect ratio"} active={lock} onClick={() => setLock((l) => !l)} size="lg" className="mb-0.5">
+                <IconButton label={lock ? "Unlock aspect ratio" : "Lock aspect ratio"} active={lock} onClick={() => {
+                    setHeight(shownHeight);
+                    setLock((l) => !l);
+                  }} size="lg" className="mb-0.5">
                   {lock ? <Link2 className="size-4" /> : <Link2Off className="size-4" />}
                 </IconButton>
                 <Field label="Height" className="flex-1">
                   <NumberInput
-                    value={height}
+                    value={shownHeight}
                     min={1}
                     suffix="px"
                     label="Height"

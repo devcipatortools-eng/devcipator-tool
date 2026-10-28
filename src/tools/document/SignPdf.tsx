@@ -157,7 +157,7 @@ export default function SignPdf() {
       }}
       processor={processor}
       action={{
-        label: "Sign & download",
+        label: "Sign PDF",
         icon: <Signature className="size-5" />,
         disabled: !signature || placements.length === 0,
         hint: !signature ? "Create your signature first." : "Place the signature on a page.",

@@ -38,20 +38,29 @@ function wrap(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): st
 }
 
 function drawMeme(ctx: CanvasRenderingContext2D, w: number, h: number, top: string, bottom: string, st: Style, family: string) {
-  const fontSize = (st.size / 100) * w;
-  ctx.font = `${fontSize}px ${family}`;
   ctx.textAlign = "center";
   ctx.lineJoin = "round";
   ctx.miterLimit = 2;
   ctx.fillStyle = st.fill;
   ctx.strokeStyle = st.stroke;
-  ctx.lineWidth = fontSize * (st.strokeWidth / 100);
   const pad = w * 0.03;
-  const lh = fontSize * 1.08;
+  const maxWidth = w - pad * 2;
+  // Each caption keeps to its own band so long text shrinks instead of overlapping the other one or the edge.
+  const maxHeight = (h - pad * 2) * 0.4;
   const draw = (raw: string, fromTop: boolean) => {
     const text = st.upper ? raw.toUpperCase() : raw;
     if (!text.trim()) return;
-    const lines = wrap(ctx, text, w - pad * 2);
+    let fontSize = (st.size / 100) * w;
+    let lines: string[];
+    for (;;) {
+      ctx.font = `${fontSize}px ${family}`;
+      lines = wrap(ctx, text, maxWidth);
+      const fits = lines.length * fontSize * 1.08 <= maxHeight && lines.every((l) => ctx.measureText(l).width <= maxWidth);
+      if (fits || fontSize <= 8) break;
+      fontSize *= 0.92;
+    }
+    const lh = fontSize * 1.08;
+    ctx.lineWidth = fontSize * (st.strokeWidth / 100);
     ctx.textBaseline = fromTop ? "top" : "bottom";
     lines.forEach((line, i) => {
       const y = fromTop ? pad + i * lh : h - pad - (lines.length - 1 - i) * lh;
@@ -117,7 +126,7 @@ export default function MemeGenerator() {
       onReset={() => setFile(null)}
       processor={processor}
       allowAddMore
-      action={{ label: "Create meme", icon: <Laugh className="size-5" />, disabled: !preview, onClick: exportMeme }}
+      action={{ label: "Create meme", icon: <Laugh className="size-5" />, disabled: !preview || (!top.trim() && !bottom.trim()), hint: !top.trim() && !bottom.trim() ? "Add top or bottom text." : undefined, onClick: exportMeme }}
       options={
         <>
           <Field label="Top text">
