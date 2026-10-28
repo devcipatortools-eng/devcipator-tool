@@ -98,7 +98,7 @@ export default function AddPageNumbers() {
                   type="button"
                   onClick={() => set({ position: p })}
                   className={cn(
-                    "rounded-lg border px-1 py-1.5 text-xs font-medium capitalize cursor-pointer",
+                    "rounded-lg border px-1 py-1.5 text-xs font-medium capitalize cursor-pointer pointer-coarse:min-h-11",
                     opts.position === p ? "border-primary bg-primary-soft text-primary-strong" : "border-border text-fg-muted hover:text-fg",
                   )}
                 >

@@ -71,7 +71,7 @@ export default function AudioSpeed() {
                 key={p}
                 type="button"
                 onClick={() => setRate(p)}
-                className={cn("rounded-md border py-1 text-xs font-medium tabular-nums cursor-pointer", rate === p ? "border-primary bg-primary-soft text-primary-strong" : "border-border text-fg-muted hover:text-fg")}
+                className={cn("rounded-md border py-1 text-xs font-medium tabular-nums cursor-pointer pointer-coarse:min-h-11", rate === p ? "border-primary bg-primary-soft text-primary-strong" : "border-border text-fg-muted hover:text-fg")}
               >
                 {p}×
               </button>

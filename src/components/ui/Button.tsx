@@ -18,7 +18,13 @@ const SIZES: Record<Size, string> = {
   lg: "h-12 px-6 text-base gap-2 rounded-xl",
 };
 
-const ICON_SIZES: Record<Size, string> = { sm: "size-7", md: "size-8", lg: "size-9" };
+// Touch screens get 44px targets; "dense" is for tight grids (page thumbnails) that can't fit them.
+const ICON_SIZES: Record<Size | "dense", string> = {
+  dense: "size-7 pointer-coarse:size-8",
+  sm: "size-7 pointer-coarse:size-11",
+  md: "size-8 pointer-coarse:size-11",
+  lg: "size-9 pointer-coarse:size-11",
+};
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
@@ -65,7 +71,7 @@ export function IconButton({
   size = "md",
   type = "button",
   ...rest
-}: ButtonHTMLAttributes<HTMLButtonElement> & { label: string; active?: boolean; size?: Size }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { label: string; active?: boolean; size?: Size | "dense" }) {
   return (
     <button
       type={type}

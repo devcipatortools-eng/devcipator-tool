@@ -8,7 +8,7 @@ import { decodeAudioFile, encodePcm } from "@/lib/audio/client";
 import { concatPcm, pcmDuration, pcmFromBuffer, type Pcm } from "@/lib/audio/pcm";
 import { formatDuration } from "@/lib/files";
 import { Panel, ToolLayout } from "@/components/tool/ToolLayout";
-import { SortableFileList } from "@/components/tool/SortableFileList";
+import { ReorderHint, SortableFileList } from "@/components/tool/SortableFileList";
 import { ExportOptions, type ExportSettings } from "@/components/audio/AudioControls";
 import { Field, Segmented, Slider, TextInput } from "@/components/ui/controls";
 
@@ -102,7 +102,7 @@ export default function AudioJoiner() {
         </>
       }
     >
-      <Panel title="Tracks in order" actions={<span className="text-xs text-fg-subtle">Drag to reorder</span>}>
+      <Panel title="Tracks in order" actions={<ReorderHint />}>
         <SortableFileList
           items={list.items}
           onMove={list.move}

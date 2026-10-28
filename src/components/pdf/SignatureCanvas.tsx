@@ -129,7 +129,8 @@ export function SignatureCanvas({ onChange }: { onChange: (canvas: HTMLCanvasEle
         {empty && <p className="pointer-events-none absolute inset-0 flex items-center justify-center text-sm text-neutral-400">Sign here</p>}
       </div>
       <div className="flex items-center justify-between">
-        <div className="flex gap-1.5" role="radiogroup" aria-label="Pen colour">
+        {/* The swatch stays small; the button around it is the touch target. */}
+        <div className="flex gap-1.5 pointer-coarse:gap-0" role="radiogroup" aria-label="Pen colour">
           {PEN_COLORS.map((c) => (
             <button
               key={c}
@@ -138,9 +139,13 @@ export function SignatureCanvas({ onChange }: { onChange: (canvas: HTMLCanvasEle
               aria-checked={color === c}
               aria-label={`Pen colour ${c}`}
               onClick={() => pickColor(c)}
-              className={cn("size-6 rounded-full cursor-pointer ring-offset-2 ring-offset-surface", color === c && "ring-2 ring-primary")}
-              style={{ background: c }}
-            />
+              className="flex size-6 items-center justify-center rounded-full cursor-pointer pointer-coarse:size-11"
+            >
+              <span
+                className={cn("size-6 rounded-full ring-offset-2 ring-offset-surface", color === c && "ring-2 ring-primary")}
+                style={{ background: c }}
+              />
+            </button>
           ))}
         </div>
         <div className="flex gap-1">

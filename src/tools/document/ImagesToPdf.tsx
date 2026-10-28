@@ -9,7 +9,7 @@ import { pdfBlob, pdfWorker } from "@/lib/pdf/client";
 import type { RasterPage } from "@/lib/pdf/api";
 import { imageToEmbeddable } from "@/lib/image/decode";
 import { Panel, ToolLayout } from "@/components/tool/ToolLayout";
-import { SortableFileList } from "@/components/tool/SortableFileList";
+import { ReorderHint, SortableFileList } from "@/components/tool/SortableFileList";
 import { Field, Segmented, Select, TextInput } from "@/components/ui/controls";
 
 type Size = "fit" | "a4" | "letter";
@@ -113,7 +113,7 @@ export default function ImagesToPdf() {
         </>
       }
     >
-      <Panel title="Pages in order" actions={<span className="text-xs text-fg-subtle">Drag to reorder</span>}>
+      <Panel title="Pages in order" actions={<ReorderHint />}>
         <SortableFileList items={list.items} onMove={list.move} onRemove={list.remove} renderLeading={(item) => <Thumb file={item.file} />} />
       </Panel>
     </ToolLayout>

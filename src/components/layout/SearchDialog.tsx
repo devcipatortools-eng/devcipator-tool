@@ -96,7 +96,7 @@ export function SearchDialog() {
             className="h-14 flex-1 bg-transparent text-base outline-none placeholder:text-fg-subtle"
             aria-label="Search tools"
           />
-          <button type="button" onClick={close} className="rounded-md p-1 text-fg-subtle hover:text-fg cursor-pointer" aria-label="Close search">
+          <button type="button" onClick={close} className="rounded-md p-1 text-fg-subtle hover:text-fg cursor-pointer pointer-coarse:-mr-2 pointer-coarse:p-3" aria-label="Close search">
             <X className="size-5" />
           </button>
         </div>

@@ -133,7 +133,7 @@ export default function ResizeImage() {
                     }}
                   />
                 </Field>
-                <IconButton label={lock ? "Unlock aspect ratio" : "Lock aspect ratio"} active={lock} onClick={() => setLock((l) => !l)} size="lg" className="mb-0.5 pointer-coarse:size-11">
+                <IconButton label={lock ? "Unlock aspect ratio" : "Lock aspect ratio"} active={lock} onClick={() => setLock((l) => !l)} size="lg" className="mb-0.5">
                   {lock ? <Link2 className="size-4" /> : <Link2Off className="size-4" />}
                 </IconButton>
                 <Field label="Height" className="flex-1">

@@ -162,9 +162,20 @@ body {
   scroll-behavior: auto !important;
 }
 
-:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+/* In the base layer so utilities such as outline-none can still override it. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+}
+
+/* Horizontally scrolling chip rows: swipeable, but no scrollbar track. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 ::selection {

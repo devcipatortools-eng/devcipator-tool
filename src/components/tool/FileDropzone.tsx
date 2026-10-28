@@ -78,7 +78,12 @@ export function FileDropzone({ tool, onFiles, variant = "hero", label, multiple,
         </span>
         <div className="flex flex-col gap-1">
           <p className="text-lg font-semibold text-fg">
-            {isDragActive ? "Drop to add" : (label ?? `Drop ${allowMany ? "files" : "a file"} here or click to browse`)}
+            {isDragActive ? "Drop to add" : (label ?? (
+              <>
+                <span className="pointer-coarse:hidden">Drop {allowMany ? "files" : "a file"} here or click to browse</span>
+                <span className="hidden pointer-coarse:inline">Tap to choose {allowMany ? "files" : "a file"}</span>
+              </>
+            ))}
           </p>
           <p className="text-sm text-fg-muted">
             {tool.acceptLabel} · up to {tool.maxSizeMB} MB{allowMany ? " each" : ""}

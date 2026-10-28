@@ -7,6 +7,7 @@ import { usePdfDocument } from "@/hooks/usePdfDocument";
 import { pdfBlob, pdfWorker } from "@/lib/pdf/client";
 import { withExtension } from "@/lib/files";
 import { Panel, ToolLayout } from "@/components/tool/ToolLayout";
+import { ReorderHint } from "@/components/tool/SortableFileList";
 import { PdfPageCanvas } from "@/components/pdf/PdfPageCanvas";
 import { Button, IconButton } from "@/components/ui/Button";
 import { Notice } from "@/components/ui/controls";
@@ -103,7 +104,7 @@ export default function OrganizePdf() {
         </>
       }
     >
-      <Panel title="Pages" actions={<span className="text-xs text-fg-subtle">Drag or use the arrows to reorder</span>}>
+      <Panel title="Pages" actions={<ReorderHint drag="Drag or use the arrows to reorder" />}>
         {needsPassword && <Notice tone="warning">This PDF is password-protected. Remove the password in your PDF reader first.</Notice>}
         {error && <Notice tone="danger">{error}</Notice>}
         {loading && <p className="py-10 text-center text-sm text-fg-subtle">Loading pages…</p>}
@@ -138,21 +139,20 @@ export default function OrganizePdf() {
                     {p.index !== i && <span className="text-fg-subtle"> (was {p.index + 1})</span>}
                   </span>
                   <div className="flex flex-wrap">
-                    <IconButton label="Move left" onClick={() => move(i, i - 1)} disabled={i === 0} size="sm" className="pointer-coarse:size-8">
+                    <IconButton label="Move left" onClick={() => move(i, i - 1)} disabled={i === 0} size="dense">
                       <ArrowLeft className="size-3.5" />
                     </IconButton>
-                    <IconButton label="Move right" onClick={() => move(i, i + 1)} disabled={i === pages.length - 1} size="sm" className="pointer-coarse:size-8">
+                    <IconButton label="Move right" onClick={() => move(i, i + 1)} disabled={i === pages.length - 1} size="dense">
                       <ArrowRight className="size-3.5" />
                     </IconButton>
-                    <IconButton label="Rotate clockwise" onClick={() => update(i, { rotate: (p.rotate + 90) % 360 })} size="sm" className="pointer-coarse:size-8">
+                    <IconButton label="Rotate clockwise" onClick={() => update(i, { rotate: (p.rotate + 90) % 360 })} size="dense">
                       <RotateCw className="size-3.5" />
                     </IconButton>
                     <IconButton
                       label={p.deleted ? "Restore page" : "Delete page"}
                       onClick={() => update(i, { deleted: !p.deleted })}
                       active={p.deleted}
-                      size="sm"
-                      className="pointer-coarse:size-8"
+                      size="dense"
                     >
                       {p.deleted ? <Undo2 className="size-3.5" /> : <Trash2 className="size-3.5" />}
                     </IconButton>

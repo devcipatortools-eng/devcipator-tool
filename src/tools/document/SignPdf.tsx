@@ -95,9 +95,10 @@ export default function SignPdf() {
   const heightOf = (p: Placement) => (p.width * p.pageRatio) / sigRatio;
 
   function addToPage() {
-    const width = 0.3;
+    // On a phone-width preview 30% is too small to grab, so start larger.
+    const width = (overlay.current?.offsetWidth ?? VIEW_WIDTH) < 480 ? 0.45 : 0.3;
     const height = (width * pageRatio) / sigRatio;
-    setPlacements((ps) => [...ps, { id: uid(), pageIndex: page - 1, left: 0.6, top: Math.max(0, 0.85 - height), width, pageRatio }]);
+    setPlacements((ps) => [...ps, { id: uid(), pageIndex: page - 1, left: Math.min(0.6, 0.95 - width), top: Math.max(0, 0.85 - height), width, pageRatio }]);
   }
 
   function onPointerDown(e: React.PointerEvent, p: Placement, mode: "move" | "resize") {
@@ -218,14 +219,16 @@ export default function SignPdf() {
         {needsPassword && <Notice tone="warning">This PDF is password-protected. Remove the password in your PDF reader first.</Notice>}
         {error && <Notice tone="danger">{error}</Notice>}
         {doc && (
-          <div className="flex justify-center overflow-x-auto">
-            <div ref={overlay} className="relative select-none border border-border bg-white shadow-card touch-none" style={{ width: VIEW_WIDTH, maxWidth: "100%" }} onPointerMove={onPointerMove} onPointerUp={() => (drag.current = null)}>
+          // No overflow clipping here: the remove and resize handles stick out past the page edge.
+          <div className="flex justify-center">
+            <div ref={overlay} className="relative select-none border border-border bg-white shadow-card" style={{ width: VIEW_WIDTH, maxWidth: "100%" }} onPointerMove={onPointerMove} onPointerUp={() => (drag.current = null)}>
               <PdfPageCanvas doc={doc} pageNumber={page} width={VIEW_WIDTH} className="[&>canvas]:!w-full" />
+              {/* touch-none sits on each signature only, so swiping elsewhere on the page still scrolls. */}
               {sigUrl &&
                 onPage.map((p) => (
                   <div
                     key={p.id}
-                    className="group absolute cursor-move outline outline-2 outline-dashed outline-primary"
+                    className="group absolute cursor-move touch-none outline outline-2 outline-dashed outline-primary"
                     style={{ left: `${p.left * 100}%`, top: `${p.top * 100}%`, width: `${p.width * 100}%`, height: `${heightOf(p) * 100}%` }}
                     onPointerDown={(e) => onPointerDown(e, p, "move")}
                   >
@@ -236,13 +239,13 @@ export default function SignPdf() {
                       aria-label="Remove signature"
                       onPointerDown={(e) => e.stopPropagation()}
                       onClick={() => setPlacements((ps) => ps.filter((x) => x.id !== p.id))}
-                      className="absolute -right-3 -top-3 flex size-6 items-center justify-center rounded-full bg-danger text-white shadow-pop cursor-pointer"
+                      className="absolute -right-3 -top-3 flex size-6 items-center justify-center rounded-full bg-danger text-white shadow-pop cursor-pointer pointer-coarse:after:absolute pointer-coarse:after:-inset-2.5 pointer-coarse:after:content-['']"
                     >
                       <X className="size-3.5" />
                     </button>
                     <span
                       aria-label="Resize signature"
-                      className="absolute -bottom-2 -right-2 size-4 cursor-nwse-resize rounded-sm border-2 border-white bg-primary"
+                      className="absolute -bottom-2 -right-2 size-4 cursor-nwse-resize rounded-sm border-2 border-white bg-primary pointer-coarse:-bottom-2.5 pointer-coarse:-right-2.5 pointer-coarse:size-5 pointer-coarse:after:absolute pointer-coarse:after:-inset-3 pointer-coarse:after:content-['']"
                       onPointerDown={(e) => onPointerDown(e, p, "resize")}
                     />
                   </div>

@@ -220,7 +220,7 @@ export default function WatermarkImage() {
             <Slider label="Spacing" value={s.gap} onChange={(gap) => set({ gap })} min={0} max={50} format={(v) => `${v}%`} />
           ) : (
             <Field label="Position">
-              <div className="grid w-28 grid-cols-3 gap-1">
+              <div className="grid w-28 grid-cols-3 gap-1 pointer-coarse:w-36">
                 {POSITIONS.map((p) => (
                   <button
                     key={p}

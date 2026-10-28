@@ -50,7 +50,7 @@ export function ToolExplorer() {
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search tools — try “compress”, “mp3” or “merge”"
+              placeholder="Search tools, e.g. “mp3”"
               aria-label="Search tools"
               className="h-14 w-full rounded-2xl border border-border-strong bg-surface pl-12 pr-12 text-base text-fg shadow-pop placeholder:text-fg-subtle focus:border-primary focus:outline-none"
             />
@@ -59,7 +59,7 @@ export function ToolExplorer() {
                 type="button"
                 onClick={() => setQuery("")}
                 aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-fg-subtle hover:text-fg cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-fg-subtle hover:text-fg cursor-pointer pointer-coarse:right-1 pointer-coarse:p-3.5"
               >
                 <X className="size-4" />
               </button>
@@ -73,7 +73,7 @@ export function ToolExplorer() {
 
         <section id="all-tools" aria-label="All tools" className="flex scroll-mt-24 flex-col gap-6">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <div role="tablist" aria-label="Filter by category" className="-mx-4 flex gap-1 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+            <div role="tablist" aria-label="Filter by category" className="no-scrollbar -mx-4 flex gap-1 overflow-x-auto px-4 sm:mx-0 sm:px-0 max-sm:[mask-image:linear-gradient(to_right,transparent,black_16px,black_calc(100%-24px),transparent)]">
               {tabs.map((tab) => {
                 const active = filter === tab.id;
                 return (
@@ -82,7 +82,11 @@ export function ToolExplorer() {
                     role="tab"
                     type="button"
                     aria-selected={active}
-                    onClick={() => setFilter(tab.id)}
+                    onClick={(e) => {
+                      setFilter(tab.id);
+                      // On phones the row scrolls; keep the chosen chip and its neighbours in view.
+                      e.currentTarget.scrollIntoView({ block: "nearest", inline: "center" });
+                    }}
                     className={cn(
                       "inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium cursor-pointer pointer-coarse:min-h-11",
                       active ? "border-fg bg-fg text-bg" : "border-border bg-surface text-fg-muted hover:text-fg hover:border-border-strong",

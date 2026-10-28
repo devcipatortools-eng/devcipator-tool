@@ -125,7 +125,7 @@ export function Navbar() {
             <div key={cat.id} className="mb-4">
               <Link
                 href={`/category/${cat.id}`}
-                className={cn("mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider", CATEGORY_STYLE[cat.id].text)}
+                className={cn("mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider pointer-coarse:mb-0 pointer-coarse:py-3.5", CATEGORY_STYLE[cat.id].text)}
               >
                 <span className={cn("size-2 rounded-full", CATEGORY_STYLE[cat.id].solid)} />
                 {cat.label}
@@ -133,7 +133,7 @@ export function Navbar() {
               <ul className="grid grid-cols-1 gap-0.5 sm:grid-cols-2">
                 {toolsInCategory(cat.id).map((tool) => (
                   <li key={tool.slug}>
-                    <Link href={`/tools/${tool.slug}`} className="block rounded-lg px-2 py-1.5 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg pointer-coarse:py-2.5">
+                    <Link href={`/tools/${tool.slug}`} className="block rounded-lg px-2 py-1.5 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg pointer-coarse:py-3">
                       {tool.title}
                     </Link>
                   </li>

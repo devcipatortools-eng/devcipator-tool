@@ -6,7 +6,7 @@ import { useFileList } from "@/hooks/useFileList";
 import { useProcessor } from "@/hooks/useProcessor";
 import { usePdfInfos, usePdfMerge } from "@/hooks/usePdfOps";
 import { Panel, ToolLayout } from "@/components/tool/ToolLayout";
-import { SortableFileList } from "@/components/tool/SortableFileList";
+import { ReorderHint, SortableFileList } from "@/components/tool/SortableFileList";
 import { PdfFileThumb } from "@/components/pdf/PdfPageCanvas";
 import { Field, TextInput, Notice } from "@/components/ui/controls";
 
@@ -59,7 +59,7 @@ export default function MergePdf() {
         </>
       }
     >
-      <Panel title="Files in merge order" actions={<span className="text-xs text-fg-subtle">Drag rows to reorder</span>}>
+      <Panel title="Files in merge order" actions={<ReorderHint drag="Drag rows to reorder" />}>
         {problems.length > 0 && (
           <Notice tone="warning" className="mb-3">
             {problems.length} file{problems.length > 1 ? "s are" : " is"} encrypted or unreadable. Remove {problems.length > 1 ? "them" : "it"} or remove the password first.

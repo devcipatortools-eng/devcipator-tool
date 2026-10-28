@@ -94,10 +94,10 @@ export default function RotatePdf() {
                     {rot !== 0 && <span className="text-primary-strong"> · {rot}°</span>}
                   </span>
                   <div className="flex">
-                    <IconButton label={`Rotate page ${i + 1} left`} onClick={() => rotatePage(i, -90)} size="sm" className="pointer-coarse:size-11">
+                    <IconButton label={`Rotate page ${i + 1} left`} onClick={() => rotatePage(i, -90)} size="sm">
                       <RotateCcw className="size-3.5" />
                     </IconButton>
-                    <IconButton label={`Rotate page ${i + 1} right`} onClick={() => rotatePage(i, 90)} size="sm" className="pointer-coarse:size-11">
+                    <IconButton label={`Rotate page ${i + 1} right`} onClick={() => rotatePage(i, 90)} size="sm">
                       <RotateCw className="size-3.5" />
                     </IconButton>
                   </div>

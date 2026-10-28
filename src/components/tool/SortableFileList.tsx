@@ -16,6 +16,16 @@ interface SortableFileListProps {
   renderMeta?: (item: FileItem, index: number) => ReactNode;
 }
 
+/** Panel-header hint; touch screens can't drag rows, so they're pointed at the arrows. */
+export function ReorderHint({ drag = "Drag to reorder" }: { drag?: string }) {
+  return (
+    <span className="text-xs text-fg-subtle">
+      <span className="pointer-coarse:hidden">{drag}</span>
+      <span className="hidden pointer-coarse:inline">Use the arrows to reorder</span>
+    </span>
+  );
+}
+
 /** Reorderable list via drag and drop (pointer) or arrow buttons (keyboard). */
 export function SortableFileList({ items, onMove, onRemove, renderLeading, renderMeta }: SortableFileListProps) {
   const [dragIndex, setDragIndex] = useState<number | null>(null);
@@ -48,7 +58,7 @@ export function SortableFileList({ items, onMove, onRemove, renderLeading, rende
             setOverIndex(null);
           }}
           className={cn(
-            "flex items-center gap-2 rounded-xl border bg-surface p-2.5 sm:gap-3",
+            "flex flex-wrap items-center gap-2 rounded-xl border bg-surface p-2.5 sm:flex-nowrap sm:gap-3",
             overIndex === i && dragIndex !== i ? "border-primary bg-primary-soft" : "border-border",
             dragIndex === i && "opacity-50",
           )}
@@ -72,7 +82,8 @@ export function SortableFileList({ items, onMove, onRemove, renderLeading, rende
               )}
             </p>
           </div>
-          <div className="flex shrink-0 items-center">
+          {/* Phones put the buttons on their own row so the file name keeps the full width. */}
+          <div className="-mb-1 -mt-2 flex shrink-0 basis-full items-center justify-end sm:m-0 sm:basis-auto">
             <IconButton label="Move up" onClick={() => onMove(i, i - 1)} disabled={i === 0}>
               <ArrowUp className="size-4" />
             </IconButton>

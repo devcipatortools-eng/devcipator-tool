@@ -130,7 +130,7 @@ export default function ColorPicker() {
   return (
     <div className="grid items-start gap-6 md:grid-cols-[minmax(0,1fr)_300px] lg:grid-cols-[minmax(0,1fr)_340px]">
       <div className="flex flex-col gap-4">
-        <Panel title="Click to pick a colour" actions={<button type="button" onClick={() => setFile(null)} className="text-xs font-medium text-fg-muted hover:text-fg cursor-pointer">Change image</button>}>
+        <Panel title="Click to pick a colour" actions={<button type="button" onClick={() => setFile(null)} className="text-xs font-medium text-fg-muted hover:text-fg cursor-pointer pointer-coarse:-my-3.5 pointer-coarse:py-3.5">Change image</button>}>
           {error && <p className="text-sm text-danger">{error}</p>}
           <div className="relative flex justify-center">
             <canvas

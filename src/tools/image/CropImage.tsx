@@ -98,7 +98,7 @@ export default function CropImage() {
                     if (size) setRect(fitAspect(size.width, size.height, a.value));
                   }}
                   className={cn(
-                    "rounded-lg border px-2 py-1.5 text-sm font-medium cursor-pointer",
+                    "rounded-lg border px-2 py-1.5 text-sm font-medium cursor-pointer pointer-coarse:min-h-11",
                     aspectLabel === a.label ? "border-primary bg-primary-soft text-primary-strong" : "border-border text-fg-muted hover:text-fg",
                   )}
                 >

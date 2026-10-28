@@ -41,7 +41,7 @@ function Tile({
         type="button"
         onClick={onRemove}
         aria-label={`Remove ${item.file.name}`}
-        className="absolute right-2.5 top-2.5 flex size-6 items-center justify-center rounded-full bg-surface/90 text-fg-muted shadow-card ring-1 ring-border hover:text-danger cursor-pointer"
+        className="absolute right-2.5 top-2.5 flex size-6 items-center justify-center rounded-full bg-surface/90 text-fg-muted shadow-card ring-1 ring-border hover:text-danger cursor-pointer pointer-coarse:after:absolute pointer-coarse:after:-inset-2.5 pointer-coarse:after:content-['']"
       >
         <X className="size-3.5" />
       </button>
