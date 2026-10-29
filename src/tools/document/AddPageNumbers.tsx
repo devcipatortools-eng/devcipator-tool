@@ -36,7 +36,8 @@ export default function AddPageNumbers() {
     margin: 28,
     fromPage: 0,
     startAt: 1,
-    totalMode: "file",
+    // "last" equals the page count by default and never yields "Page 10 of 5" once the numbering is shifted.
+    totalMode: "last",
   });
   const [previewPage, setPreviewPage] = useState(1);
   const [pageSize, setPageSize] = useState<{ width: number; height: number } | null>(null);
@@ -111,7 +112,7 @@ export default function AddPageNumbers() {
           <Slider label="Distance from edge" value={opts.margin} onChange={(margin) => set({ margin })} min={8} max={90} format={(v) => `${v} pt`} />
           <ColorInput label="Colour" value={opts.color} onChange={(color) => set({ color })} />
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Start on page">
+            <Field label="Start on page" hint={numPages ? `1 to ${numPages}` : undefined}>
               <NumberInput value={opts.fromPage + 1} onChange={(v) => set({ fromPage: Math.min(Math.max(0, (v || 1) - 1), Math.max(0, numPages - 1)) })} min={1} max={numPages || 1} label="Start on page" />
             </Field>
             <Field label="First number">
@@ -124,9 +125,9 @@ export default function AddPageNumbers() {
               value={opts.totalMode}
               onChange={(totalMode) => set({ totalMode })}
               options={[
-                { value: "file", label: `Pages in this file (${numPages})` },
-                { value: "numbered", label: `Numbered pages only (${numPages - opts.fromPage})` },
                 { value: "last", label: `Last page number (${opts.startAt + numPages - opts.fromPage - 1})` },
+                { value: "numbered", label: `Numbered pages only (${numPages - opts.fromPage})` },
+                { value: "file", label: `Pages in this file (${numPages})` },
               ]}
             />
           )}

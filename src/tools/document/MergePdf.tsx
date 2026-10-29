@@ -9,6 +9,7 @@ import { Panel, ToolLayout } from "@/components/tool/ToolLayout";
 import { ReorderHint, SortableFileList } from "@/components/tool/SortableFileList";
 import { PdfFileThumb } from "@/components/pdf/PdfPageCanvas";
 import { Field, TextInput, Notice } from "@/components/ui/controls";
+import { outputName } from "@/lib/files";
 
 export default function MergePdf() {
   const list = useFileList(true);
@@ -42,7 +43,7 @@ export default function MergePdf() {
         icon: <Combine className="size-5" />,
         disabled: files.length < 2 || problems.length > 0,
         hint: problems.length ? "Remove the highlighted files first." : "Add at least two PDFs.",
-        onClick: () => processor.run((ctx) => merge(files, `${name.trim() || "merged"}.pdf`, ctx)),
+        onClick: () => processor.run((ctx) => merge(files, outputName(name, "merged", "pdf"), ctx)),
       }}
       options={
         <>

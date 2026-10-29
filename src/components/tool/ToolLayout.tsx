@@ -57,6 +57,14 @@ export function ToolLayout({
 }: ToolLayoutProps) {
   // The upload screen unmounts once a file is accepted, so files rejected in the same drop are reported here.
   const [rejected, setRejected] = useState<string[]>([]);
+  // Results stay downloadable after inputs change, but are flagged so they aren't mistaken for the current settings.
+  const [stale, setStale] = useState(false);
+  const [seen, setSeen] = useState({ results: processor.results, fileCount });
+  if (seen.results !== processor.results || seen.fileCount !== fileCount) {
+    setSeen({ results: processor.results, fileCount });
+    setStale(seen.results === processor.results && processor.status === "done");
+  }
+  const markStale = () => processor.status === "done" && setStale(true);
   const tool = getTool(slug);
   if (!tool) throw new Error(`Unknown tool: ${slug}`);
   const running = processor.status === "running";
@@ -93,7 +101,13 @@ export function ToolLayout({
             </Notice>
           )}
 
-          {options}
+          <div
+            className="contents"
+            onChangeCapture={markStale}
+            onClickCapture={(e) => (e.target as Element).closest("button") && markStale()}
+          >
+            {options}
+          </div>
 
           {(allowAddMore ?? tool.multiple) && !running && <FileDropzone tool={tool} onFiles={onFiles} variant="compact" />}
 
@@ -118,6 +132,9 @@ export function ToolLayout({
           {processor.status === "error" && processor.error && <Notice tone="danger">{processor.error}</Notice>}
         </div>
 
+        {processor.status === "done" && stale && (
+          <Notice tone="warning">These files were made with earlier settings. Click “{action.label}” again to update them.</Notice>
+        )}
         {processor.status === "done" && <ResultList results={processor.results} zipName={zipName ?? `${slug}.zip`} message={processor.message} />}
       </aside>
     </div>

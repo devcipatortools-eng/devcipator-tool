@@ -56,8 +56,15 @@ export default function AudioCutter() {
 
   const sel = selection ?? { start: 0, end: duration };
   const resultLength = mode === "keep" ? sel.end - sel.start : duration - (sel.end - sel.start);
-  const setStart = (t: number) => setSelection({ start: Math.max(0, Math.min(t, sel.end - 0.01)), end: sel.end });
-  const setEnd = (t: number) => setSelection({ start: sel.start, end: Math.min(duration, Math.max(t, sel.start + 0.01)) });
+  // A start typed past the end (or an end before the start) moves the other edge out of the way instead of collapsing the selection.
+  const setStart = (t: number) => {
+    const start = Math.max(0, Math.min(t, duration - 0.01));
+    setSelection({ start, end: start < sel.end ? sel.end : duration });
+  };
+  const setEnd = (t: number) => {
+    const end = Math.min(duration, Math.max(t, 0.01));
+    setSelection({ start: end > sel.start ? sel.start : 0, end });
+  };
 
   async function exportCut() {
     if (!buffer || !file) return;
@@ -68,7 +75,7 @@ export default function AudioCutter() {
       const result = mode === "keep" ? slicePcm(pcm, sel.start, sel.end) : cutOutPcm(pcm, sel.start, sel.end);
       fadePcm(result, fadeIn, fadeOut);
       const blob = await encodePcm(result, exportSettings.format, exportSettings.kbps, { signal, onProgress: report });
-      return [{ name: withExtension(file.name, exportSettings.format, "-cut"), blob, note: formatDuration(resultLength) }];
+      return [{ name: withExtension(file.name, exportSettings.format, "-cut"), blob, note: formatDuration(resultLength, true) }];
     });
   }
 
@@ -84,7 +91,7 @@ export default function AudioCutter() {
       }}
       processor={processor}
       allowAddMore
-      action={{ label: `Export ${formatDuration(resultLength)}`, icon: <Scissors className="size-5" />, disabled: !buffer || resultLength <= 0.01, onClick: exportCut }}
+      action={{ label: `Export ${formatDuration(resultLength, true)}`, icon: <Scissors className="size-5" />, disabled: !buffer || resultLength <= 0.01, onClick: exportCut }}
       options={
         <>
           <Segmented

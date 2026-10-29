@@ -78,15 +78,30 @@ export function medianCut(pixels: Uint8ClampedArray, count: number): Array<{ rgb
     if (mid <= 0) mid = box.findIndex((p) => p[channel] > v);
     boxes = [...boxes.slice(0, target), box.slice(0, mid), box.slice(mid), ...boxes.slice(target + 1)];
   }
-  // Boxes can still average to the same colour; merge those into one swatch.
+  // Each box is shown as its most common exact colour, not its average, so a swatch is always a colour that is
+  // really in the image (an average of blue and white would invent #8080FF). Identical swatches are merged.
   const merged = new Map<string, { rgb: Rgb; share: number }>();
   for (const box of boxes) {
     if (box.length === 0) continue;
-    const sum = box.reduce((acc, p) => [acc[0] + p[0], acc[1] + p[1], acc[2] + p[2]], [0, 0, 0]);
-    const rgb = sum.map((v) => Math.round(v / box.length)) as Rgb;
+    const counts = new Map<number, number>();
+    let best = 0;
+    let bestCount = 0;
+    for (const p of box) {
+      const key = (p[0] << 16) | (p[1] << 8) | p[2];
+      const n = (counts.get(key) ?? 0) + 1;
+      counts.set(key, n);
+      if (n > bestCount) {
+        best = key;
+        bestCount = n;
+      }
+    }
+    const rgb: Rgb = [best >> 16, (best >> 8) & 255, best & 255];
     const key = rgb.join();
     const prev = merged.get(key);
     merged.set(key, { rgb, share: (prev?.share ?? 0) + box.length / colors.length });
   }
-  return [...merged.values()].sort((a, b) => b.share - a.share);
+  // Slivers under 1% are usually anti-aliased edges or compression noise, not colours anyone would pick.
+  const swatches = [...merged.values()].sort((a, b) => b.share - a.share);
+  const significant = swatches.filter((s) => s.share >= 0.01);
+  return significant.length ? significant : swatches.slice(0, 1);
 }

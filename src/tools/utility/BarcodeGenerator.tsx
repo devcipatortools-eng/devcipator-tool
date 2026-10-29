@@ -22,7 +22,7 @@ const FORMATS: Array<{ value: Format; label: string; example: string; hint: stri
 function invalidReason(meta: (typeof FORMATS)[number], value: string): string {
   if (meta.digits) {
     const [short, full] = meta.digits;
-    if (/D/.test(value)) return `${meta.label} uses digits only.`;
+    if (/\D/.test(value)) return `${meta.label} uses digits only.`;
     if (value.length !== short && value.length !== full) return `${meta.label} needs ${short} or ${full} digits; this has ${value.length}.`;
     return "The last digit is not a valid check digit. Remove it and it is calculated for you.";
   }
@@ -104,7 +104,8 @@ export default function BarcodeGenerator() {
           value={format}
           onChange={(f) => {
             setFormat(f);
-            setValue(FORMATS.find((x) => x.value === f)!.example);
+            // Only swap in the new example if the user hasn't typed their own value.
+            if (!value || value === meta.example) setValue(FORMATS.find((x) => x.value === f)!.example);
           }}
           options={FORMATS.map((f) => ({ value: f.value, label: f.label }))}
         />

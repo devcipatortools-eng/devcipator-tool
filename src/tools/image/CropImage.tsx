@@ -10,7 +10,7 @@ import { EXT, formatFor, type OutputFormat } from "@/lib/image/ops";
 import { withExtension, clamp } from "@/lib/files";
 import { Panel, ToolLayout } from "@/components/tool/ToolLayout";
 import { CropBox, type Rect } from "@/components/image/CropBox";
-import { Field, NumberInput, Select } from "@/components/ui/controls";
+import { Field, NumberInput, Notice, Select } from "@/components/ui/controls";
 import { cn } from "@/lib/cn";
 
 const ASPECTS: Array<{ label: string; value: number | null }> = [
@@ -131,6 +131,7 @@ export default function CropImage() {
       }
     >
       <Panel title={size ? `${size.width} × ${size.height} px` : "Image"} actions={rect && <span className="text-xs text-fg-muted tabular-nums">Crop: {rect.width} × {rect.height}</span>}>
+        {size === null && <Notice tone="danger">This file couldn&apos;t be opened as an image. It may be damaged or not really an image. Click Start over and pick another file.</Notice>}
         <div className="flex justify-center">
           {url && size && rect && <CropBox src={url} naturalWidth={size.width} naturalHeight={size.height} rect={rect} onChange={setRect} aspect={aspect} />}
         </div>

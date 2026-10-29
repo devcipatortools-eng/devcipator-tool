@@ -26,6 +26,10 @@ const PRESETS = [
   { value: "3840x2160", label: "4K UHD — 3840×2160" },
 ];
 
+// Browsers refuse canvases past roughly these limits (Safari is the strictest on area).
+const MAX_SIDE = 16384;
+const MAX_PIXELS = 16384 * 16384 / 4;
+
 export default function ResizeImage() {
   const list = useFileList(true);
   const processor = useProcessor();
@@ -56,9 +60,23 @@ export default function ResizeImage() {
     list.items.map((i) => {
       const d = dims.get(i.file);
       const t = targetFor(i.file);
-      return [i.id, d && t ? `${d.width}×${d.height} → ${t.width}×${t.height}` : "…"];
+      return [i.id, d === null ? "Can't read this image" : d && t ? `${d.width}×${d.height} → ${t.width}×${t.height}` : "…"];
     }),
   );
+
+  const unreadable = files.filter((f) => dims.get(f) === null);
+  const tooLarge = files.some((f) => {
+    const t = targetFor(f);
+    return t && (t.width > MAX_SIDE || t.height > MAX_SIDE || t.width * t.height > MAX_PIXELS);
+  });
+  const badInput = mode === "pixels" ? !(width > 0 && shownHeight > 0) : !(percent > 0);
+  const hint = badInput
+    ? mode === "pixels"
+      ? "Width and height must be at least 1 px."
+      : "Scale must be above 0%."
+    : tooLarge
+      ? `That's too large for the browser. Keep each side under ${MAX_SIDE.toLocaleString()} px and the total under ${Math.round(MAX_PIXELS / 1e6)} megapixels.`
+      : `Remove the unreadable image${unreadable.length === 1 ? "" : "s"} first: ${unreadable.map((f) => f.name).join(", ")}.`;
 
   async function resize() {
     const items = list.items;
@@ -69,7 +87,7 @@ export default function ResizeImage() {
         const file = items[i].file;
         report(i / items.length, `Resizing ${file.name}`);
         const size = targetFor(file);
-        if (!size) throw new Error(`Could not read ${file.name}.`);
+        if (!size) throw new Error(`“${file.name}” isn't a readable image. Remove it and try again.`);
         const format = formatFor(file.type);
         const res = await transformImage(file, { resize: size, format, quality: 0.92 }, { signal });
         out.push({ name: withExtension(file.name, EXT[format], `-${res.width}x${res.height}`), blob: res.blob, note: `${res.width}×${res.height}` });
@@ -89,8 +107,8 @@ export default function ResizeImage() {
       action={{
         label: `Resize ${files.length > 1 ? `${files.length} images` : "image"}`,
         icon: <Scaling className="size-5" />,
-        disabled: mode === "pixels" ? !(width > 0 && shownHeight > 0) : !(percent > 0),
-        hint: mode === "pixels" ? "Width and height must be at least 1 px." : "Scale must be above 0%.",
+        disabled: badInput || tooLarge || unreadable.length > 0,
+        hint,
         onClick: resize,
       }}
       options={

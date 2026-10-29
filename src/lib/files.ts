@@ -48,6 +48,16 @@ export function withExtension(name: string, ext: string, suffix = ""): string {
   return `${baseName(name)}${suffix}.${ext.replace(/^\./, "")}`;
 }
 
+/** Turns a typed file name into a safe one: drops a repeated extension and characters Windows/macOS reject. */
+export function outputName(typed: string, fallback: string, ext: string): string {
+  const clean = typed
+    .trim()
+    .replace(new RegExp(`\\.${ext}$`, "i"), "")
+    .replace(/[\\/:*?"<>|\u0000-\u001f]+/g, "-")
+    .replace(/^[\s.]+|[\s.]+$/g, "");
+  return `${clean || fallback}.${ext}`;
+}
+
 export function matchesAccept(file: File, accept: string[]): boolean {
   if (accept.length === 0) return true;
   const name = file.name.toLowerCase();

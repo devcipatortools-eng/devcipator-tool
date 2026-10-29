@@ -17,7 +17,20 @@ const WORD = /[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu;
 const HAS_ALNUM = /[\p{L}\p{N}]/u;
 
 /** Abbreviations whose full stop doesn't end a sentence ("Dr. Smith", "e.g. this"). */
-const ABBREVIATIONS = new Set("mr mrs ms dr prof sr jr st mt vs etc e.g i.e approx dept est fig inc ltd co no vol a.m p.m u.s".split(" "));
+const ABBREVIATIONS = new Set(
+  "mr mrs ms dr prof sr jr st mt vs etc e.g i.e approx dept est fig inc ltd co no vol a.m p.m u.s jan feb mar apr jun jul aug sep sept oct nov dec".split(" "),
+);
+
+let graphemes: Intl.Segmenter | null | undefined;
+/** Counts user-perceived characters, so "👍🏽" or "é" written as e + accent count once. */
+function characterCount(text: string): number {
+  if (graphemes === undefined) graphemes = typeof Intl !== "undefined" && "Segmenter" in Intl ? new Intl.Segmenter(undefined, { granularity: "grapheme" }) : null;
+  if (!graphemes) return [...text].length;
+  let n = 0;
+  const it = graphemes.segment(text)[Symbol.iterator]();
+  while (!it.next().done) n++;
+  return n;
+}
 const endsWithAbbreviation = (s: string) => ABBREVIATIONS.has((s.match(/(\S+)\.$/)?.[1] ?? "").replace(/^[^\p{L}]+/u, "").toLowerCase());
 
 export function textStats(text: string): TextStats {
@@ -37,8 +50,8 @@ export function textStats(text: string): TextStats {
   const letters = words.reduce((n, w) => n + w.length, 0);
   return {
     words: words.length,
-    characters: [...text].length,
-    charactersNoSpaces: [...text.replace(/\s/g, "")].length,
+    characters: characterCount(text),
+    charactersNoSpaces: characterCount(text.replace(/\s/g, "")),
     sentences,
     paragraphs,
     lines: text ? text.split("\n").length : 0,
@@ -65,6 +78,11 @@ export function topKeywords(text: string, limit = 8): Array<{ word: string; coun
 export function formatSeconds(s: number): string {
   if (s < 1) return "0 sec";
   if (s < 60) return `${Math.round(s)} sec`;
+  if (s >= 3600) {
+    const h = Math.floor(s / 3600);
+    const min = Math.round((s % 3600) / 60);
+    return min ? `${h} hr ${min} min` : `${h} hr`;
+  }
   const m = Math.floor(s / 60);
   const sec = Math.round(s % 60);
   return sec ? `${m} min ${sec} sec` : `${m} min`;
@@ -86,7 +104,13 @@ export function splitWords(text: string): string[] {
     .filter(Boolean);
 }
 
-const cap = (w: string) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+/** Uppercases the first letter unless that would change its length ("ß" → "SS"). */
+const upperFirst = (w: string) => {
+  const first = [...w][0] ?? "";
+  const up = first.toUpperCase();
+  return (up.length === first.length ? up : first) + w.slice(first.length);
+};
+const cap = (w: string) => upperFirst(w.toLowerCase());
 
 function convertLine(line: string, style: CaseStyle): string {
   switch (style) {
@@ -105,7 +129,9 @@ function convertLine(line: string, style: CaseStyle): string {
         if (!first && SMALL_WORDS.has(lower)) return lower;
         // Keep deliberate inner capitals ("myXMLParser" → "MyXMLParser"); all-caps words are still normalised.
         const mixed = /\p{Ll}/u.test(w) && /\p{Lu}/u.test(w.slice(1));
-        return mixed ? w.charAt(0).toUpperCase() + w.slice(1) : cap(w);
+        // Brand-style names that start lowercase ("iPhone", "eBay") are left exactly as written.
+        if (mixed && /^\p{Ll}\p{Lu}/u.test(w)) return w;
+        return mixed ? upperFirst(w) : cap(w);
       });
     }
     default: {
@@ -115,8 +141,7 @@ function convertLine(line: string, style: CaseStyle): string {
       if (style === "pascal") return words.map(cap).join("");
       if (style === "snake") return words.map((w) => w.toLowerCase()).join("_");
       if (style === "kebab") return words.map((w) => w.toLowerCase()).join("-");
-      return words.map((w) => w.toUpperCase()).join("_");
-    }
+      return words.map((w) => w.toUpperCase()).join("_");    }
   }
 }
 

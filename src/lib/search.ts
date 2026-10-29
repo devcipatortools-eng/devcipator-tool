@@ -21,12 +21,17 @@ export function searchTools(query: string, pool: ToolConfig[] = TOOLS): ToolConf
     if (!allowed.has(entry.tool.slug)) continue;
     let score = 0;
     let matchedAll = true;
-    for (const w of words) {
+    for (const word of words) {
       let s = 0;
-      if (entry.title.split(" ").some((t) => t.startsWith(w))) s = 10;
-      else if (entry.title.includes(w)) s = 7;
-      else if (entry.keywords.includes(w)) s = 5;
-      else if (entry.body.includes(w)) s = 2;
+      // Try the word as typed, then without a plural ending ("words" → "word", "boxes" → "box").
+      const forms = [word, ...(word.length > 3 && word.endsWith("s") ? [word.slice(0, -1)] : []), ...(word.length > 4 && word.endsWith("es") ? [word.slice(0, -2)] : [])];
+      for (const w of forms) {
+        if (entry.title.split(" ").some((t) => t.startsWith(w))) s = 10;
+        else if (entry.title.includes(w)) s = 7;
+        else if (entry.keywords.includes(w)) s = 5;
+        else if (entry.body.includes(w)) s = 2;
+        if (s) break;
+      }
       if (s === 0) {
         matchedAll = false;
         break;

@@ -6,7 +6,7 @@ import { useFileList } from "@/hooks/useFileList";
 import { useProcessor, throwIfAborted } from "@/hooks/useProcessor";
 import { decodeAudioFile, encodePcm } from "@/lib/audio/client";
 import { concatPcm, pcmDuration, pcmFromBuffer, type Pcm } from "@/lib/audio/pcm";
-import { formatDuration } from "@/lib/files";
+import { formatDuration, outputName } from "@/lib/files";
 import { Panel, ToolLayout } from "@/components/tool/ToolLayout";
 import { ReorderHint, SortableFileList } from "@/components/tool/SortableFileList";
 import { ExportOptions, type ExportSettings } from "@/components/audio/AudioControls";
@@ -63,7 +63,7 @@ export default function AudioJoiner() {
         signal,
         onProgress: (v, l) => report(0.6 + (v ?? 0) * 0.4, l),
       });
-      return [{ name: `${name.trim() || "joined"}.${exportSettings.format}`, blob, note: formatDuration(pcmDuration(joined)) }];
+      return [{ name: outputName(name, "joined", exportSettings.format), blob, note: formatDuration(pcmDuration(joined)) }];
     });
   }
 
@@ -75,7 +75,7 @@ export default function AudioJoiner() {
       onReset={list.clear}
       processor={processor}
       action={{
-        label: `Join ${files.length} tracks`,
+        label: files.length === 1 ? "Join tracks" : `Join ${files.length} tracks`,
         icon: <ListMusic className="size-5" />,
         disabled: files.length < 2 || broken.length > 0,
         hint: broken.length ? "Remove files your browser cannot decode." : "Add at least two tracks.",

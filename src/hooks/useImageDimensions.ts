@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { decodeImage, imageSize } from "@/lib/image/decode";
 
-/** Natural pixel size of each image file (EXIF orientation applied). */
-export function useImageDimensions(files: File[]): Map<File, { width: number; height: number }> {
-  const [dims, setDims] = useState(new Map<File, { width: number; height: number }>());
+/** Natural pixel size of each image file (EXIF orientation applied); null once a file fails to decode. */
+export function useImageDimensions(files: File[]): Map<File, { width: number; height: number } | null> {
+  const [dims, setDims] = useState(new Map<File, { width: number; height: number } | null>());
   const requested = useRef(new WeakSet<File>());
   useEffect(() => {
     for (const f of files) {
@@ -17,7 +17,7 @@ export function useImageDimensions(files: File[]): Map<File, { width: number; he
           if ("close" in img) img.close();
           setDims((prev) => new Map(prev).set(f, size));
         })
-        .catch(() => {});
+        .catch(() => setDims((prev) => new Map(prev).set(f, null)));
     }
   }, [files]);
   return dims;

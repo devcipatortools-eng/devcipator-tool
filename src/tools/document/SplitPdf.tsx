@@ -30,7 +30,9 @@ export default function SplitPdf() {
       : mode === "ranges"
         ? parseRanges(ranges, numPages)
         : mode === "chunks"
-          ? { groups: chunkPages(numPages, Math.max(1, chunk || 1)), error: null }
+          ? Number.isInteger(chunk) && chunk >= 1
+            ? { groups: chunkPages(numPages, chunk), error: null }
+            : { groups: [], error: "Pages per file must be a whole number of 1 or more." }
           : { groups: chunkPages(numPages, 1), error: null };
 
   const pageGroup = new Map<number, number>();
