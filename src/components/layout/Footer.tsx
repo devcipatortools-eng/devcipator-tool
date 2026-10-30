@@ -37,7 +37,12 @@ export function Footer() {
       </div>
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-fg-subtle sm:flex-row sm:px-6">
-          <p>© {SITE.name}. All processing happens locally in your browser.</p>
+          <div className="flex flex-col items-center gap-1 sm:items-start">
+            <p>© {SITE.name}. All processing happens locally in your browser.</p>
+            <p>
+              Powered by <span className="font-medium text-fg-muted">Devcipator</span>
+            </p>
+          </div>
           <nav className="flex gap-5" aria-label="Legal">
             <Link href="/privacy" className="hover:text-fg max-sm:py-3 pointer-coarse:py-3">Privacy</Link>
             <Link href="/terms" className="hover:text-fg max-sm:py-3 pointer-coarse:py-3">Terms</Link>
