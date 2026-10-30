@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 import { ProsePage } from "@/components/layout/Prose";
-import { SITE } from "@/config/tools.config";
+import { PAGE_SEO, SITE } from "@/config/tools.config";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms of Use",
-  description: `Terms for using ${SITE.name}.`,
-  alternates: { canonical: "/terms" },
-};
+export const metadata: Metadata = pageMetadata({ title: PAGE_SEO.terms.title, description: PAGE_SEO.terms.description, path: "/terms", siteImage: true });
 
 export default function TermsPage() {
   return (

@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 import { ProsePage } from "@/components/layout/Prose";
-import { SITE } from "@/config/tools.config";
+import { PAGE_SEO, SITE } from "@/config/tools.config";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: `How ${SITE.name} handles your files and data.`,
-  alternates: { canonical: "/privacy" },
-};
+export const metadata: Metadata = pageMetadata({ title: PAGE_SEO.privacy.title, description: PAGE_SEO.privacy.description, path: "/privacy", siteImage: true });
 
 export default function PrivacyPage() {
   return (

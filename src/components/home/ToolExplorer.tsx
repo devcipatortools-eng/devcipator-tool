@@ -71,7 +71,8 @@ export function ToolExplorer() {
       <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 pt-10 sm:px-6">
         <QuickAccess />
 
-        <section id="all-tools" aria-label="All tools" className="flex scroll-mt-24 flex-col gap-6">
+        <section id="all-tools" aria-labelledby="all-tools-heading" className="flex scroll-mt-24 flex-col gap-6">
+          <h2 id="all-tools-heading" className="sr-only">All tools</h2>
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div role="tablist" aria-label="Filter by category" className="no-scrollbar -mx-4 flex gap-1 overflow-x-auto px-4 sm:mx-0 sm:px-0 max-sm:[mask-image:linear-gradient(to_right,transparent,black_16px,black_calc(100%-24px),transparent)]">
               {tabs.map((tab) => {

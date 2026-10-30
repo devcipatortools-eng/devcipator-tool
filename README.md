@@ -20,6 +20,22 @@ npm run typecheck
 `browser-image-compression` worker library into `public/vendor/` so everything is served from our own origin
 (no third-party CDN). `public/vendor/` is git-ignored.
 
+### Environment variables
+
+All optional. `NEXT_PUBLIC_*` values are inlined at build time, so redeploy after changing them.
+
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical origin, e.g. `https://devcipator-tool.vercel.app`. On Vercel it defaults to the production domain. |
+| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console "HTML tag" code (the `content` value only). |
+| `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Bing Webmaster Tools `msvalidate.01` code. |
+
+## SEO
+
+Titles, meta descriptions, keywords, FAQs and category copy all live in `src/config/tools.config.ts`. Keep tool
+and category `seoTitle` at 40 characters or fewer (the layout appends “| Devcipator Tools”) and descriptions at
+140–160 characters. Bump `SITE.updated` when copy changes so the sitemap's `lastmod` stays accurate.
+
 ## Tools
 
 | Category  | Tools |

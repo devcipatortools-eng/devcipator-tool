@@ -11,7 +11,8 @@ const wordmark = Inter({ weight: "700", subsets: ["latin"] });
 export function Logo() {
   return (
     <Link href="/" className="flex items-center gap-[0.4rem] pointer-coarse:min-h-11" aria-label={`${SITE.name} home`}>
-      <Image src={logo} alt="" priority className="h-7 w-auto" />
+      {/* Rendered at h-7; the explicit size keeps the srcset at 1x/2x of that instead of the 924px source. */}
+      <Image src={logo} alt="" width={135} height={28} priority className="h-7 w-auto" />
       {/* 16.5px puts the cap height level with the logo's letters at h-7; the gradient continues the logo's. */}
       <span
         className={cn(

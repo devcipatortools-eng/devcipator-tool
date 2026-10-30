@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, CircleCheck, ShieldCheck } from "lucide-react";
-import { SITE, TOOLS, getCategory, getTool, relatedTools } from "@/config/tools.config";
+import { TOOLS, getCategory, getTool, relatedTools, toolFaqs } from "@/config/tools.config";
 import { CATEGORY_STYLE } from "@/lib/category-style";
 import { cn } from "@/lib/cn";
 import { Badge } from "@/components/ui/Badge";
 import { ToolIcon } from "@/components/tool/ToolIcon";
 import { ToolLoader } from "@/components/tool/ToolLoader";
 import { ToolCard } from "@/components/home/ToolCard";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { ORGANIZATION_ID, WEBSITE_ID, absoluteUrl, breadcrumbList, pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return TOOLS.map((t) => ({ slug: t.slug }));
@@ -18,14 +20,9 @@ export async function generateMetadata({ params }: PageProps<"/tools/[slug]">): 
   const { slug } = await params;
   const tool = getTool(slug);
   if (!tool) return { title: "Tool not found" };
-  const title = `${tool.title} — Free Online, No Upload`;
   return {
-    title,
-    description: tool.intro,
+    ...pageMetadata({ title: tool.seoTitle, description: tool.metaDescription, path: `/tools/${tool.slug}` }),
     keywords: tool.keywords,
-    alternates: { canonical: `/tools/${tool.slug}` },
-    openGraph: { title: `${tool.title} | ${SITE.name}`, description: tool.description, url: `/tools/${tool.slug}` },
-    twitter: { title: `${tool.title} | ${SITE.name}`, description: tool.description },
   };
 }
 
@@ -38,28 +35,47 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
   const style = CATEGORY_STYLE[tool.category];
   const related = relatedTools(tool, 6);
 
-  const jsonLd = [
+  const faqs = toolFaqs(tool);
+  const url = absoluteUrl(`/tools/${tool.slug}`);
+
+  const graph = [
     {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
+      "@type": "WebApplication",
+      "@id": `${url}#app`,
       name: tool.title,
-      description: tool.intro,
-      applicationCategory: "UtilitiesApplication",
+      description: tool.metaDescription,
+      url,
+      applicationCategory: category.applicationCategory,
       operatingSystem: "Any (web browser)",
+      browserRequirements: "Requires JavaScript and a modern web browser",
+      isAccessibleForFree: true,
       offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-      url: `${SITE.url}/tools/${tool.slug}`,
+      featureList: tool.features,
+      inLanguage: "en",
+      isPartOf: { "@id": WEBSITE_ID },
+      publisher: { "@id": ORGANIZATION_ID },
     },
     {
-      "@context": "https://schema.org",
       "@type": "HowTo",
+      "@id": `${url}#how-to`,
       name: `How to use ${tool.title}`,
       step: tool.steps.map((text, i) => ({ "@type": "HowToStep", position: i + 1, text })),
     },
+    {
+      "@type": "FAQPage",
+      "@id": `${url}#faq`,
+      mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    },
+    breadcrumbList([
+      { name: "Home", path: "/" },
+      { name: category.label, path: `/category/${category.id}` },
+      { name: tool.title, path: `/tools/${tool.slug}` },
+    ]),
   ];
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <JsonLd graph={graph} />
 
       <div className="border-b border-border bg-surface">
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:px-6">
@@ -123,6 +139,18 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
               ))}
             </ul>
           </section>
+
+          <section aria-labelledby="faq">
+            <h2 id="faq" className="text-2xl font-semibold tracking-tight text-fg">Frequently asked questions</h2>
+            <div className="mt-5 flex flex-col divide-y divide-border rounded-2xl border border-border bg-surface">
+              {faqs.map((f) => (
+                <div key={f.q} className="p-4 md:p-5">
+                  <h3 className="font-medium text-fg">{f.q}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-fg-muted">{f.a}</p>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
 
         <aside aria-labelledby="related" className="lg:sticky lg:top-20 lg:self-start">
@@ -148,7 +176,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
         <div className="flex items-end justify-between gap-4">
           <h2 id="more" className="text-xl font-semibold tracking-tight text-fg">More {category.title}</h2>
           <Link href={`/category/${category.id}`} className={cn("text-sm font-medium pointer-coarse:-my-3 pointer-coarse:py-3", style.text)}>
-            View all →
+            View all<span className="sr-only"> {category.title}</span> →
           </Link>
         </div>
         <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

@@ -1,9 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Cpu, ShieldCheck, Zap } from "lucide-react";
-import { CATEGORIES, toolsInCategory } from "@/config/tools.config";
+import { CATEGORIES, PAGE_SEO, toolsInCategory } from "@/config/tools.config";
 import { CATEGORY_STYLE } from "@/lib/category-style";
 import { cn } from "@/lib/cn";
 import { ToolExplorer } from "@/components/home/ToolExplorer";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({ title: { absolute: PAGE_SEO.home.title }, description: PAGE_SEO.home.description, path: "/" });
 
 const PILLARS = [
   { icon: ShieldCheck, title: "Private by default", text: "Files are processed locally with Web APIs and WebAssembly. Nothing is uploaded." },
@@ -34,7 +38,8 @@ export default function Home() {
           ))}
         </section>
 
-        <section aria-label="Why Devcipator" className="mt-12 sm:mt-6 grid gap-4 rounded-2xl border border-border bg-surface-2 p-6 md:grid-cols-3 md:p-8">
+        <section aria-labelledby="why" className="mt-12 sm:mt-6 grid gap-4 rounded-2xl border border-border bg-surface-2 p-6 md:grid-cols-3 md:p-8">
+          <h2 id="why" className="sr-only">Why Devcipator Tools</h2>
           {PILLARS.map(({ icon: Icon, title, text }) => (
             <div key={title} className="flex gap-4">
               <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-surface text-primary ring-1 ring-border">
