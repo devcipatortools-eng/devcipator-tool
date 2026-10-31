@@ -5,7 +5,7 @@
 /*
  * Design tokens. Every color in the UI comes from here so light and dark
  * themes stay in sync. Category accents: document = coral, image = teal,
- * audio = amber; the brand primary is indigo.
+ * audio = amber; the brand primary is the logo's orange.
  */
 :root {
   color-scheme: light;
@@ -21,11 +21,11 @@
   --fg-muted: oklch(0.46 0.03 264);
   --fg-subtle: oklch(0.51 0.022 264);
 
-  --primary: oklch(0.52 0.21 268);
-  --primary-hover: oklch(0.47 0.21 268);
+  --primary: oklch(0.58 0.2 36);
+  --primary-hover: oklch(0.53 0.19 36);
   --primary-fg: oklch(0.99 0 0);
-  --primary-soft: oklch(0.95 0.03 268);
-  --primary-strong: oklch(0.42 0.19 268);
+  --primary-soft: oklch(0.955 0.03 40);
+  --primary-strong: oklch(0.47 0.16 36);
 
   --doc: oklch(0.6 0.2 25);
   --doc-soft: oklch(0.955 0.03 25);
@@ -68,11 +68,11 @@
   --fg-muted: oklch(0.74 0.02 264);
   --fg-subtle: oklch(0.6 0.02 264);
 
-  --primary: oklch(0.68 0.17 270);
-  --primary-hover: oklch(0.74 0.15 270);
+  --primary: oklch(0.72 0.17 40);
+  --primary-hover: oklch(0.78 0.14 42);
   --primary-fg: oklch(0.16 0.03 264);
-  --primary-soft: oklch(0.28 0.07 270);
-  --primary-strong: oklch(0.8 0.12 270);
+  --primary-soft: oklch(0.28 0.07 38);
+  --primary-strong: oklch(0.82 0.11 45);
 
   --doc: oklch(0.7 0.17 25);
   --doc-soft: oklch(0.28 0.06 25);

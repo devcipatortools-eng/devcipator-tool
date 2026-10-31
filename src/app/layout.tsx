@@ -30,8 +30,15 @@ export const metadata: Metadata = {
     template: `%s | ${SITE.name}`,
   },
   description: PAGE_SEO.home.description,
+  // Tool and category pages replace these with their own.
+  keywords: SITE.keywords,
   applicationName: SITE.name,
+  authors: [{ name: SITE.organization, url: SITE.organizationUrl }],
+  creator: SITE.organization,
   publisher: SITE.organization,
+  category: "technology",
+  // Stops iOS turning numbers in tool output (page counts, sizes) into phone links.
+  formatDetection: { telephone: false, email: false, address: false },
   robots: {
     index: true,
     follow: true,

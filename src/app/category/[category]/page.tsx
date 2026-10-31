@@ -17,7 +17,11 @@ export async function generateMetadata({ params }: PageProps<"/category/[categor
   const { category } = await params;
   const cat = getCategory(category);
   if (!cat) return { title: "Category not found" };
-  return pageMetadata({ title: cat.seoTitle, description: cat.metaDescription, path: `/category/${cat.id}` });
+  return {
+    ...pageMetadata({ title: cat.seoTitle, description: cat.metaDescription, path: `/category/${cat.id}` }),
+    // Each tool's two leading search phrases.
+    keywords: toolsInCategory(cat.id).flatMap((t) => t.keywords.slice(0, 2)),
+  };
 }
 
 export default async function CategoryPage({ params }: PageProps<"/category/[category]">) {

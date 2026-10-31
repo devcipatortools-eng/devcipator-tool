@@ -789,8 +789,22 @@ export const SITE = {
   shortName: "Devcipator",
   /** Publisher name used in structured data. */
   organization: "Devcipator",
+  organizationUrl: "https://devcipator.com/",
   logo: "/devcipator-logo.png",
   description: "Free, private, in-browser tools for PDFs, images, audio and everyday tasks. Files never leave your device.",
+  /** Meta keywords for pages without their own (home, privacy, terms). */
+  keywords: [
+    "free online tools",
+    "online pdf tools",
+    "image tools online",
+    "audio tools online",
+    "merge pdf",
+    "compress image",
+    "audio cutter",
+    "qr code generator",
+    "no upload file tools",
+    "private browser tools",
+  ],
   // VERCEL_PROJECT_PRODUCTION_URL is set by Vercel at build time (host only, no scheme).
   url:
     process.env.NEXT_PUBLIC_SITE_URL ??

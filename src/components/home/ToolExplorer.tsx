@@ -39,7 +39,7 @@ export function ToolExplorer() {
           </div>
           <h1 className="text-balance text-4xl font-semibold tracking-tight text-fg sm:text-6xl">
             Every file tool you need,{" "}
-            <span className="text-primary">running in your browser.</span>
+            <span className="bg-gradient-to-r from-[#ff6c48] to-[#ff7d5e] bg-clip-text text-transparent">running in your browser.</span>
           </h1>
           <p className="max-w-2xl text-balance text-lg text-fg-muted">
             Merge and sign PDFs, compress images, cut audio, make QR codes and more. Your files are processed on your device and never uploaded.
